@@ -1,28 +1,8 @@
 from pathlib import Path
+from utils.utils import YamlParser, DashboardFinder
 
-import yaml
 import pandas as pd
 import streamlit
-
-
-context = yaml.safe_load("""
-version: 2
-dashboards:
-  - name: TPCH Dashboards
-    title: Dashboards for the TCPH project
-    description: Dashboards for the TCPH project 
-    package_name: dbt-tpch
-    assets:
-      - name: Orders
-        title: TCPH Orders
-        type: line_chart
-        sort_by: TPCH_COUNT_ORDERS
-        ascending: True
-        x: METRIC_TIME__MONTH
-        y: TPCH_COUNT_ORDERS
-        metrics:
-          - tpch_count_orders
-""")
 
 
 class Cache:
@@ -63,15 +43,20 @@ class App:
         self.cache = self._load_cache()
 
     def _load_context(self):
+        finder = DashboardFinder()
+        dashboards_path = finder.find_dashboards_dir()
+        parser = YamlParser(dashboards_path)
+        context = parser.get_raw_data()
         return context
 
     def _load_cache(self):
+        # TODO: Decide on caching approach
         return Cache()
 
     def run(self):
         # Generate dashboard objects
         pages = dict()
-        for idx, dashboard in enumerate(self.ctx.get("dashboards")):
+        for idx, dashboard in enumerate(self.ctx):
             package_name = dashboard.get("package_name")
             assets = list()
             pages[package_name] = (idx, assets)
@@ -79,15 +64,15 @@ class App:
                 assets.append(Asset(self.cache, dashboard, asset))
 
         # Display sidebar
-        packages = [dashboard.get("package_name") for dashboard in self.ctx.get("dashboards")]
+        packages = [dashboard.get("package_name") for dashboard in self.ctx]
         with streamlit.sidebar:
             streamlit.title("dbt Dashboards")
             streamlit.subheader("A central place for all your dbt related metrics.")
             option = streamlit.selectbox("Select a dbt package from the list below.", packages)
 
-        # Dsplay selected dashboard
+        # Display selected dashboard
         dashboard_idx, assets = pages.get(option)
-        dashboard = self.ctx.get("dashboards")[dashboard_idx]
+        dashboard = self.ctx[dashboard_idx]
 
         streamlit.title(dashboard.get("name"))
         streamlit.text(dashboard.get("description"))

@@ -1,0 +1,17 @@
+version: 2
+
+dashboards:
+  - name: TPCH Dashboards
+    title: Dashboards for the TCPH project
+    description: Dashboards for the TCPH project
+    package_name: dbt-tpch
+    assets:
+      - name: Orders
+        title: TCPH Orders
+        type: line_chart
+        sort_by: TPCH_COUNT_ORDERS
+        ascending: True
+        x: METRIC_TIME__MONTH
+        y: TPCH_COUNT_ORDERS
+        metrics:
+          - tpch_count_orders
