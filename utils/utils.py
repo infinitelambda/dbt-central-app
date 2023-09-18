@@ -53,20 +53,14 @@ class YamlParser:
     def __init__(self, dashboards_dir: str):
         self.dashboards_dir = dashboards_dir
 
-    def _parse_yaml_file(self, file_path: str) -> dict:
+    def _parse_dashboard_from_file(self, file_path: str) -> List[dict]:
 
         with open(file_path, "r") as file:
             yaml_data = yaml.safe_load(file)
-            return yaml_data
 
-    def _parse_dashboard_data(self, yaml_data: dict) -> List[dict]:
-
-        # Extract clean dashboard data from a raw parsed dictionary.
-        parsed_data = []
-        if "dashboard_as_yml" in yaml_data:
-            for dashboard in yaml_data["dashboard_as_yml"]:
-                parsed_data.append(dashboard)
-        return parsed_data
+        # Assuming after the "version" comes the 'dashboard description' without requiring any naming convention
+        stripped_dashboard_data = list(yaml_data.values())[1]
+        return stripped_dashboard_data
 
     def _parse_yaml_files(self) -> List[dict]:
 
@@ -74,8 +68,7 @@ class YamlParser:
         for filename in os.listdir(self.dashboards_dir):
             if filename.endswith(".yml"):
                 file_path = os.path.join(self.dashboards_dir, filename)
-                yaml_data = self._parse_yaml_file(file_path)
-                dashboard_data = self._parse_dashboard_data(yaml_data)
+                dashboard_data = self._parse_dashboard_from_file(file_path)
                 parsed_data.extend(dashboard_data)
         return parsed_data
 
@@ -120,18 +113,22 @@ class CacheDirectoryManager:
         else:
             return True, f"{self.cache_directory_path} already exists."
 
-    def download_cache_files(self) -> Tuple[bool, str]:
+    def download_cache_files(self, package_name: str, metric_name: str) -> Tuple[bool, str]:
         """
         Download cache files using 'mf query' and save them to the .cache directory.
 
         Note: Make sure 'mf' command-line tool is available and properly configured.
 
+        Args:
+             package_name (str): The name of the package to download cache files from.
+             metric_name (str): The name of the metric to download.
+
         Returns:
             Tuple[bool, str]: A tuple containing a boolean indicating success (True if the download was
             successful, False otherwise), and a message string indicating the result or any errors.
         """
-        metric_name = "tpch_count_orders"
-        cache_file_path = os.path.join(self.cache_directory_path, f"dbt-tpch/{metric_name}.csv")
+        # package_name = "dbt-tpch"; metric_name = "tpch_count_orders" # example values
+        cache_file_path = os.path.join(self.cache_directory_path, f"{package_name}/{metric_name}.csv")
 
         try:
             subprocess.run(["mf", "query",
