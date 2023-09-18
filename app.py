@@ -15,13 +15,21 @@ dashboards:
     assets:
       - name: Orders
         title: TCPH Orders
+        description: Order count by month.
+        metric: tpch_count_orders
         type: line_chart
         sort_by: TPCH_COUNT_ORDERS
-        ascending: True
+        ascending: False
         x: METRIC_TIME__MONTH
         y: TPCH_COUNT_ORDERS
-        metrics:
-          - tpch_count_orders
+      
+      - name: Orders Details
+        title: TCPH Orders Details
+        description: Order count detailed.
+        metric: tpch_count_orders
+        type: table
+        sort_by: METRIC_TIME__MONTH
+        ascending: True
 """)
 
 
@@ -33,12 +41,6 @@ class Cache:
         return pd.read_csv(Path(self.path, package, metric + ".csv"))
 
 
-class AssetStreamlitChartMap:
-    chart = {
-        "line_chart": streamlit.line_chart
-    }
-
-
 class Asset:
     def __init__(self, cache, dashboard, spec):
         self.cache = cache
@@ -48,13 +50,35 @@ class Asset:
     def fetch_metric_data(self):
         # TODO: check we can have only one metric per asset
         # TODO: define logic if multiple metrics
-        return self.cache.fetch(package=self.dashboard.get("package_name"), metric=self.spec.get("metrics")[0])
+        return self.cache.fetch(package=self.dashboard.get("package_name"), metric=self.spec.get("metric"))
+
+    def sort_metric_data(self, data):
+        data = self.fetch_metric_data()
+        return data.sort_values(by=[self.spec.get("sort_by")], ascending=self.spec.get("ascending"))
+
+
+class LineChartAsset(Asset):
 
     def display(self):
         data = self.fetch_metric_data()
-        data.sort_values(by=self.spec.get("sort_by"), ascending=self.spec.get("ascending"))
-        draw_chart = AssetStreamlitChartMap.chart.get(self.spec.get("type"))
-        draw_chart(data, x=self.spec.get("x"), y=self.spec.get("y"))
+        data = self.sort_metric_data(data)
+        streamlit.line_chart(data, x=self.spec.get("x"), y=self.spec.get("y"))
+
+
+class TableAsset(Asset):
+
+    def display(self):
+        data = self.fetch_metric_data()
+        data = self.sort_metric_data(data)
+        print(data)
+        streamlit.dataframe(data)
+
+
+class AssetStreamlitChartMap:
+    chart = {
+        "line_chart": LineChartAsset,
+        "table": TableAsset
+    }
 
 
 class App:
@@ -71,12 +95,13 @@ class App:
     def run(self):
         # Generate dashboard objects
         pages = dict()
-        for idx, dashboard in enumerate(self.ctx.get("dashboards")):
-            package_name = dashboard.get("package_name")
+        for idx, dashboard_spec in enumerate(self.ctx.get("dashboards")):
+            package_name = dashboard_spec.get("package_name")
             assets = list()
             pages[package_name] = (idx, assets)
-            for asset in dashboard.get("assets"):
-                assets.append(Asset(self.cache, dashboard, asset))
+            for asset_spec in dashboard_spec.get("assets"):
+                asset = AssetStreamlitChartMap.chart.get(asset_spec.get("type"))
+                assets.append(asset(self.cache, dashboard_spec, asset_spec))
 
         # Display sidebar
         packages = [dashboard.get("package_name") for dashboard in self.ctx.get("dashboards")]
@@ -87,12 +112,13 @@ class App:
 
         # Dsplay selected dashboard
         dashboard_idx, assets = pages.get(option)
-        dashboard = self.ctx.get("dashboards")[dashboard_idx]
+        dashboard_spec = self.ctx.get("dashboards")[dashboard_idx]
 
-        streamlit.title(dashboard.get("name"))
-        streamlit.text(dashboard.get("description"))
+        streamlit.title(dashboard_spec.get("name"))
+        streamlit.text(dashboard_spec.get("description"))
         for asset in assets:
             streamlit.header(asset.spec.get("title"))
+            streamlit.text(asset.spec.get("description"))
             asset.display()
             streamlit.divider()
 
