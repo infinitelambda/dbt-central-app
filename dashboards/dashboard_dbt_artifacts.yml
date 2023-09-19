@@ -1,0 +1,16 @@
+version: 2
+
+dashboards:
+  - name: dashboard_dbt_artifact
+    description: Dashboard which contains informations about KPIs to display
+    package_name: dbt_project_artifact
+    title: dbt project artifact dashboards
+    assets:
+      - name: doc_artifact_coverage
+        title: Documentation coverage on the last run
+        metric: non_esistent
+        type: line_chart
+        sort_by: TPCH_COUNT_ORDERS
+        ascending: True
+        x: METRIC_TIME__MONTH
+        y: TPCH_COUNT_ORDERS
