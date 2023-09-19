@@ -8,10 +8,17 @@ dashboards:
     assets:
       - name: Orders
         title: TCPH Orders
+        metric: tpch_count_orders
         type: line_chart
-        sort_by: TPCH_COUNT_ORDERS
+        sort_by: METRIC_TIME__MONTH
         ascending: True
         x: METRIC_TIME__MONTH
         y: TPCH_COUNT_ORDERS
-        metrics:
-          - tpch_count_orders
+
+      - name: Orders Details
+        title: TCPH Orders Details
+        description: Order count detailed.
+        metric: tpch_count_orders
+        type: table
+        sort_by: TPCH_COUNT_ORDERS
+        ascending: True

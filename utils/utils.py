@@ -54,13 +54,11 @@ class YamlParser:
         self.dashboards_dir = dashboards_dir
 
     def _parse_dashboard_from_file(self, file_path: str) -> List[dict]:
-
         with open(file_path, "r") as file:
             yaml_data = yaml.safe_load(file)
 
-        # Assuming after the "version" comes the 'dashboard description' without requiring any naming convention
-        stripped_dashboard_data = list(yaml_data.values())[1]
-        return stripped_dashboard_data
+        dashboards_spec = yaml_data.get("dashboards")
+        return dashboards_spec
 
     def _parse_yaml_files(self) -> List[dict]:
 

@@ -1,3 +1,4 @@
+import abc
 from pathlib import Path
 from utils.utils import YamlParser, DashboardFinder
 
@@ -5,36 +6,64 @@ import pandas as pd
 import streamlit
 
 
+class CacheMiss(Exception):
+    pass
+
+
 class Cache:
     def __init__(self):
         self.path = ".cache"
 
     def fetch(self, package, metric):
-        return pd.read_csv(Path(self.path, package, metric + ".csv"))
+        try:
+            return pd.read_csv(Path(self.path, package, metric + ".csv"))
+        except FileNotFoundError:
+            raise CacheMiss()
 
 
-class AssetStreamlitChartMap:
-    chart = {
-        "line_chart": streamlit.line_chart
-    }
-
-
-class Asset:
+class Asset(abc.ABC):
     def __init__(self, cache, dashboard, spec):
         self.cache = cache
         self.dashboard = dashboard
         self.spec = spec
 
     def fetch_metric_data(self):
-        # TODO: check we can have only one metric per asset
-        # TODO: define logic if multiple metrics
-        return self.cache.fetch(package=self.dashboard.get("package_name"), metric=self.spec.get("metrics")[0])
+        return self.cache.fetch(package=self.dashboard.get("package_name"), metric=self.spec.get("metric"))
+
+    def sort_metric_data(self, data):
+        data = self.fetch_metric_data()
+        return data.sort_values(by=[self.spec.get("sort_by")], ascending=self.spec.get("ascending"))
 
     def display(self):
-        data = self.fetch_metric_data()
-        data.sort_values(by=self.spec.get("sort_by"), ascending=self.spec.get("ascending"))
-        draw_chart = AssetStreamlitChartMap.chart.get(self.spec.get("type"))
-        draw_chart(data, x=self.spec.get("x"), y=self.spec.get("y"))
+        try:
+            data = self.fetch_metric_data()
+            data = self.sort_metric_data(data)
+            self.chart(data)
+        except CacheMiss:
+            streamlit.warning(f"Could not find data for metric `{self.spec.get('metric')}`.", icon="⚠️")
+
+    @abc.abstractmethod
+    def chart(self, data):
+        pass
+
+
+class LineChartAsset(Asset):
+
+    def chart(self, data):
+        streamlit.line_chart(data, x=self.spec.get("x"), y=self.spec.get("y"))
+
+
+class TableAsset(Asset):
+
+    def chart(self, data):
+        streamlit.dataframe(data)
+
+
+class AssetStreamlitChartMap:
+    chart = {
+        "line_chart": LineChartAsset,
+        "table": TableAsset
+    }
 
 
 class App:
@@ -56,12 +85,13 @@ class App:
     def run(self):
         # Generate dashboard objects
         pages = dict()
-        for idx, dashboard in enumerate(self.ctx):
-            package_name = dashboard.get("package_name")
+        for idx, dashboard_spec in enumerate(self.ctx):
+            package_name = dashboard_spec.get("package_name")
             assets = list()
             pages[package_name] = (idx, assets)
-            for asset in dashboard.get("assets"):
-                assets.append(Asset(self.cache, dashboard, asset))
+            for asset_spec in dashboard_spec.get("assets"):
+                asset = AssetStreamlitChartMap.chart.get(asset_spec.get("type"))
+                assets.append(asset(self.cache, dashboard_spec, asset_spec))
 
         # Display sidebar
         packages = [dashboard.get("package_name") for dashboard in self.ctx]
@@ -72,12 +102,13 @@ class App:
 
         # Display selected dashboard
         dashboard_idx, assets = pages.get(option)
-        dashboard = self.ctx[dashboard_idx]
+        dashboard_spec = self.ctx[dashboard_idx]
 
-        streamlit.title(dashboard.get("name"))
-        streamlit.text(dashboard.get("description"))
+        streamlit.title(dashboard_spec.get("name"))
+        streamlit.text(dashboard_spec.get("description"))
         for asset in assets:
             streamlit.header(asset.spec.get("title"))
+            streamlit.text(asset.spec.get("description"))
             asset.display()
             streamlit.divider()
 
