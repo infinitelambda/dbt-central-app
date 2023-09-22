@@ -1,0 +1,181 @@
+version: 2
+
+dashboards:
+  - name: dbt project evaluator
+    title: Dashboards for dbt project evaluator
+    description: Dashboards for dbt project evaluator
+    package_name: dbt_project_evaluator
+    assets:
+      - name: dbt project evaluator chained views dependencies
+        title: chained views dependencies details
+        description: Need to be filled
+        metric: fct_chained_views_dependencies_kpis
+        type: table
+
+
+      - name: dbt project evaluator direct join to source
+        title: direct join to source details
+        description: Need to be filled
+        metric: fct_direct_join_to_source_kpis
+        type: table
+
+
+      - name: dbt project evaluator documentation coverage
+        title: documentation coverage details
+        description: Need to be filled
+        metric: fct_documentation_coverage_kpis
+        type: table
+
+
+      - name: dbt project evaluator exposures dependent on private models
+        title: exposures dependent on private models details
+        description: Need to be filled
+        metric: fct_exposures_dependent_on_private_models_kpis
+        type: table
+
+
+      - name: dbt project evaluator exposure parents materializations
+        title: exposure parents materializations details
+        description: Need to be filled
+        metric: fct_exposure_parents_materializations_kpis
+        type: table
+
+
+      - name: dbt project evaluator hard coded references
+        title: hard coded references details
+        description: Need to be filled
+        metric: fct_hard_coded_references_kpis
+        type: table
+
+
+      - name: dbt project evaluator missing primary key tests
+        title: missing primary key tests details
+        description: Need to be filled
+        metric: fct_missing_primary_key_tests_kpis
+        type: table
+
+
+      - name: dbt project evaluator model directories
+        title: model directories details
+        description: Need to be filled
+        metric: fct_model_directories_kpis
+        type: table
+
+
+      - name: dbt project evaluator model fanout
+        title: model fanout details
+        description: Need to be filled
+        metric: fct_model_fanout_kpis
+        type: table
+
+
+      - name: dbt project evaluator model naming conventions
+        title: model naming conventions details
+        description: Need to be filled
+        metric: fct_model_naming_conventions_kpis
+        type: table
+
+
+      - name: dbt project evaluator public models without contract
+        title: public models without contract details
+        description: Need to be filled
+        metric: fct_public_models_without_contract_kpis
+        type: table
+
+
+      - name: dbt project evaluator rejoining of upstream concepts
+        title: rejoining of upstream concepts details
+        description: Need to be filled
+        metric: fct_rejoining_of_upstream_concepts_kpis
+        type: table
+
+
+      - name: dbt project evaluator source directories
+        title: source directories details
+        description: Need to be filled
+        metric: fct_source_directories_kpis
+        type: table
+
+
+      - name: dbt project evaluator source fanout
+        title: source fanout details
+        description: Need to be filled
+        metric: fct_source_fanout_kpis
+        type: table
+
+
+      - name: dbt project evaluator staging dependent on marts or intermediate
+        title: staging dependent on marts or intermediate details
+        description: Need to be filled
+        metric: fct_staging_dependent_on_marts_or_intermediate_kpis
+        type: table
+
+
+      - name: dbt project evaluator staging dependent on staging
+        title: staging dependent on staging details
+        description: Need to be filled
+        metric: fct_staging_dependent_on_staging_kpis
+        type: table
+
+
+      - name: dbt project evaluator test coverage
+        title: test coverage details
+        description: Need to be filled
+        metric: fct_test_coverage_kpis
+        type: table
+
+
+      - name: dbt project evaluator test directories
+        title: test directories details
+        description: Need to be filled
+        metric: fct_test_directories_kpis
+        type: table
+
+
+      - name: dbt project evaluator undocumented models
+        title: undocumented models details
+        description: Need to be filled
+        metric: fct_undocumented_models_kpis
+        type: table
+
+
+      - name: dbt project evaluator duplicate sources
+        title: duplicate sources details
+        description: Need to be filled
+        metric: fct_duplicate_sources_kpis
+        type: table
+
+
+      - name: dbt project evaluator multiple sources joined
+        title: multiple sources joined details
+        description: Need to be filled
+        metric: fct_multiple_sources_joined_kpis
+        type: table
+
+
+      - name: dbt project evaluator undocumented public models
+        title: undocumented public models details
+        description: Need to be filled
+        metric: fct_undocumented_public_models_kpis
+        type: table
+
+
+      - name: dbt project evaluator unused sources
+        title: unused sources details
+        description: Need to be filled
+        metric: fct_unused_sources_kpis
+        type: table
+
+
+      - name: dbt project evaluator marts or intermediate dependent on source
+        title: marts or intermediate dependent on source details
+        description: Need to be filled
+        metric: fct_marts_or_intermediate_dependent_on_source_kpis
+        type: table
+
+
+      - name: dbt project evaluator root models
+        title: root models details
+        description: Need to be filled
+        metric: fct_root_models_kpis
+        type: table
