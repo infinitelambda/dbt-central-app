@@ -1,4 +1,4 @@
-# Dbt Dashboards Strimlit
+# dbt Dashboards Streamlit
 
 ## Usage
 
@@ -42,14 +42,14 @@ pip install -r requirements.txt
 ```
 
 ### Run the Application: 
-Navigate to the src directory and once the dependencies are installed, you can start the Streamlit application using the following command:
+Navigate to the src directory and once the dependencies are installed, you can start the streamlit application using the following command:
 ```commandline
 streamlit run app.py
 ```
 
 # Use the POC for transpose table
-
-From the root directory (**dbt-dashboards-strimlit/**) run
+Follow the previously described setup steps then:  
+From the root directory **dbt-dashboards-strimlit/** run
 
 ```commandline
 streamlit run transpose_df.py
@@ -57,19 +57,25 @@ streamlit run transpose_df.py
 
 # Use **_mf_helper.py_**
 
-## To automatically generate all the cache files (_.csv_) please use this script as follows:
-
+## To automatically generate all the cache files _(.csv)_ please use this script as follows:
+Follow the previously described setup steps then:  
 Navigate to your dbt_project directory where the profiles.yml is located. 
 
 Please make sure that in _```mf_helper.py```_:
-- ```self.file_path``` is pointing to: "dbt-dashboards-strimlit/adrien/dashboard/dbt_project_evaluator.yml"
-- ```self.root_directory``` is pointing to "dbt-dashboards-strimlit/adrien/"
+- ```dashboard_path_to_load``` is pointing to the desired YAML file
+- ```self.root_directory``` is pointing to the desired location
 
 Make sure that you use **username** and **password** in the _profiles.yml_. **It's critical for metricflow to run seamlessly**
 
 Run the script from you using:  
 ```commandline
-python path/to/dbt-dashboards-strimlit/mf_helper.py
+python path/to/mf_helper.py
 ```
 
-
+### Note:  
+_This is currently an experimental version for manual testing.  
+Running metricflow directly from the dbt project to validate the success of the given YAML specification is advised.  
+```mf_helper.py``` will show the result of execution in a byte format.  
+All the progress will be implemented in the main branch of the project repository after approval_  
+  
+**Please make sure all the manual steps are done before running.** 

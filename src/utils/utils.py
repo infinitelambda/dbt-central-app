@@ -131,10 +131,7 @@ class CacheDirectoryManager:
         cache_file_path = os.path.join(self.cache_directory_path, f"{metric_name}.csv")
 
         try:
-            subprocess.run(["mf", "query",
-                            "--metrics", f"{metric_name}",
-                            "--group-by", "metric_time__month",
-                            "--csv", cache_file_path],
+            subprocess.run([f"mf query --metrics {metric_name} --csv {cache_file_path}"],
                            capture_output=True, check=True, shell=True)
             return True, f"Downloaded {metric_name}.csv to {cache_file_path}"
         except subprocess.CalledProcessError as e:
