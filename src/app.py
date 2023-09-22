@@ -1,6 +1,6 @@
 import abc
 from pathlib import Path
-from utils.utils import YamlParser, DashboardFinder
+from src.utils.utils import YamlParser, DashboardFinder
 
 import pandas as pd
 import streamlit
@@ -12,7 +12,7 @@ class CacheMiss(Exception):
 
 class Cache:
     def __init__(self):
-        self.path = ".cache"
+        self.path = "../.cache"
 
     def fetch(self, package, metric):
         try:

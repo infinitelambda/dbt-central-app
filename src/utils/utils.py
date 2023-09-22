@@ -1,7 +1,7 @@
 import os
 import yaml
 import subprocess
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 
 class DashboardFinder:
@@ -9,20 +9,26 @@ class DashboardFinder:
     A class for finding the 'dashboards' directory recursively.
     """
 
-    def __init__(self, start_path: str = None):
+    def __init__(self, start_path: str = "../"):
         """
         Initialize the DashboardFinder.
 
         :param start_path: The starting directory path (default is the current working directory).
         :type start_path: str
         """
-        self.start_path = start_path or os.getcwd()
+        self.start_path = start_path # or os.getcwd()
 
-    def _validate_directory(self, directory: str) -> str:
+    def _validate_directory(self, directory: str) -> Union[str, None]:
 
         # Check if the 'dashboards' directory exists in the specified directory.
-        dashboards_dir = os.path.join(directory, 'dashboards')
-        return dashboards_dir if os.path.exists(dashboards_dir) and os.path.isdir(dashboards_dir) else None
+        # TODO ??exclude .venv hardcoded to reduce lookup time?
+        try:
+            dashboards_dir = os.path.join(directory, 'dashboards')
+            if os.path.exists(dashboards_dir) and os.path.isdir(dashboards_dir):
+                return dashboards_dir
+        except (OSError, PermissionError) as e:
+            print(f"Error while checking directory '{directory}': {e}")
+            return None
 
     def find_dashboards_dir(self) -> str:
         """
@@ -33,13 +39,10 @@ class DashboardFinder:
         """
         current_directory = self.start_path
 
-        for root, _, _ in os.walk(current_directory):
-            dashboards_path = self._validate_directory(root)
-            if dashboards_path:
-                return dashboards_path
-
-        # TODO implement similar solution like in `create_cache_directory():`
-        return "The 'dashboards' directory was not found in the specified path, parent directory, or any of its child directories."
+        for root, subdirectories, filenames in os.walk(current_directory):
+            valid_path = self._validate_directory(root)
+            if valid_path:
+                return valid_path
 
 
 class YamlParser:
@@ -83,7 +86,7 @@ class YamlParser:
 class CacheDirectoryManager:
     """A class for managing the .cache directory."""
 
-    def __init__(self, root_directory: str = './'):
+    def __init__(self, root_directory: str = '../'):
         """
         Initialize the CacheDirectoryManager.
 
@@ -111,14 +114,13 @@ class CacheDirectoryManager:
         else:
             return True, f"{self.cache_directory_path} already exists."
 
-    def download_cache_files(self, package_name: str, metric_name: str) -> Tuple[bool, str]:
+    def download_cache_files(self, metric_name: str) -> Tuple[bool, str]:
         """
         Download cache files using 'mf query' and save them to the .cache directory.
 
         Note: Make sure 'mf' command-line tool is available and properly configured.
 
         Args:
-             package_name (str): The name of the package to download cache files from.
              metric_name (str): The name of the metric to download.
 
         Returns:
@@ -126,7 +128,7 @@ class CacheDirectoryManager:
             successful, False otherwise), and a message string indicating the result or any errors.
         """
         # package_name = "dbt-tpch"; metric_name = "tpch_count_orders" # example values
-        cache_file_path = os.path.join(self.cache_directory_path, f"{package_name}/{metric_name}.csv")
+        cache_file_path = os.path.join(self.cache_directory_path, f"{metric_name}.csv")
 
         try:
             subprocess.run(["mf", "query",
