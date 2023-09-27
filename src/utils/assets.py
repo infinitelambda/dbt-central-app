@@ -15,7 +15,7 @@ class Asset(abc.ABC):
 
     def fetch_metric_data(self) -> pd.DataFrame:
         asset_name = re.sub(r'[\s-]+', '_', self.spec.get("name").lower())  # snake_case formatting
-        return self.cache.fetch(package=self.dashboard.get("package_name"), metric=asset_name)
+        return self.cache.fetch(package=self.dashboard.get("package_name"), asset_name=asset_name)
 
     def sort_metric_data(self, data) -> pd.DataFrame:
         data = self.fetch_metric_data()
