@@ -13,9 +13,9 @@ class Cache:
     def __init__(self):
         self.path = "../.cache"
 
-    def fetch(self, package, metric) -> pd.DataFrame:
+    def fetch(self, package, asset_name) -> pd.DataFrame:
         try:
-            return pd.read_csv(Path(self.path, package, metric + ".csv"))
+            return pd.read_csv(Path(self.path, package, asset_name + ".csv"))
         except FileNotFoundError:
             raise CacheMiss()
 

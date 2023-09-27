@@ -92,4 +92,3 @@ if __name__ == '__main__':
             helper.create_cache_directory(dashboard_package_name)  # creates subdir in cache with given package_name
             info = helper.get_asset_info(dashboard_data)
             helper.generate_multiple_cache_files(dashboard_package_name, info)
-    print("done??")

@@ -1,4 +1,5 @@
 import abc
+import re
 
 import pandas as pd
 import streamlit
@@ -12,8 +13,9 @@ class Asset(abc.ABC):
         self.dashboard = dashboard
         self.spec = spec
 
-    def fetch_metric_data(self):
-        return self.cache.fetch(package=self.dashboard.get("package_name"), metric=self.spec.get("metric"))
+    def fetch_metric_data(self) -> pd.DataFrame:
+        asset_name = re.sub(r'[\s-]+', '_', self.spec.get("name").lower())  # snake_case formatting
+        return self.cache.fetch(package=self.dashboard.get("package_name"), metric=asset_name)
 
     def sort_metric_data(self, data) -> pd.DataFrame:
         data = self.fetch_metric_data()
@@ -22,7 +24,10 @@ class Asset(abc.ABC):
     def display(self):
         try:
             data = self.fetch_metric_data()
-            #  sorted_data = self.sort_metric_data(data)
+            if self.spec.get("ascending"):
+                sorted_data = self.sort_metric_data(data)
+                data = sorted_data
+
             self.chart(data)
         except CacheMiss:
             streamlit.warning(f"Could not find data for metric `{self.spec.get('metric')}`.", icon="⚠️")

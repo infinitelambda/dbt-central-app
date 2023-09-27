@@ -21,7 +21,7 @@ class DashboardFinder:
         """
         Find the 'dashboards' directory recursively starting from the specified path.
 
-        :return: The path to the 'dashboards' directory if found, otherwise a message indicating it was not found.
+        :return: The path to the first 'dashboards' directory if found, otherwise a message indicating it was not found.
         :rtype: str
         """
         current_directory = self.start_path
