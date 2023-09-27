@@ -18,7 +18,6 @@ class App:
         return context
 
     def _load_cache(self):
-        # TODO: Decide on caching approach
         return Cache()
 
     def run(self):
@@ -26,19 +25,15 @@ class App:
         pages = dict()
         # loops through each parsed file found in directory
         for idx, dashboard_spec in enumerate(self.ctx):
-            print(f"self.ctx: {self.ctx}")
             package_name = dashboard_spec.get("package_name")
             assets = list()
             pages[package_name] = (idx, assets)
-            print(f"pages: {pages}")
             for asset_spec in dashboard_spec.get("assets"):
                 asset = AssetStreamlitChartMap.chart.get(asset_spec.get("type"))
                 assets.append(asset(self.cache, dashboard_spec, asset_spec))
-                print(f"assets: {assets}")
 
         # Display sidebar
         packages = [dashboard.get("package_name") for dashboard in self.ctx]
-        print(f"\npackages: {packages}")
         with streamlit.sidebar:
             streamlit.title("dbt Dashboards")
             streamlit.subheader("A central place for all your dbt related metrics.")
@@ -46,11 +41,7 @@ class App:
 
         # Display dashboard selected by the sidebar
         dashboard_idx, assets = pages.get(option)
-        print(f"\ndashboard_idx: {dashboard_idx}")
-        print(f"assets display: {assets}")
         dashboard_spec = self.ctx[dashboard_idx]
-        print(f"dashboard_spec display: {dashboard_spec}")
-        # Main display
         streamlit.title(dashboard_spec.get("name"))  # dashboard name
         streamlit.text(dashboard_spec.get("description"))  # dashboard description
         for asset in assets:

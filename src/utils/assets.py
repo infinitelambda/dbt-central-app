@@ -42,20 +42,16 @@ class TableAsset(Asset):
 
     def chart(self, data: pd.DataFrame):
         streamlit.dataframe(data)
-        print(f"data inside TableAsset: {data}")
 
 
-class TextAsset(Asset):
+class IndicatorAsset(Asset):
     def chart(self, data: pd.DataFrame):
-        print(f'title in TextAsset: {self.spec.get("title")}')
         streamlit.metric(label=str(self.spec.get("title")), value=data.iloc[0, 0])
-        print(f"data inside TextAsset: {type(data)}")
-        # (label="Temperature", value="70 °F", delta="1.2 °F")
 
 
 class AssetStreamlitChartMap:
     chart = {
         "line_chart": LineChartAsset,
         "table": TableAsset,
-        "text": TextAsset
+        "indicator": IndicatorAsset
     }

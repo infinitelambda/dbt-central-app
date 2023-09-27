@@ -15,19 +15,7 @@ class DashboardFinder:
         :param start_path: The starting directory path (default is the current working directory).
         :type start_path: str
         """
-        self.start_path = start_path # or os.getcwd()
-
-    def _validate_directory(self, directory: str) -> Union[str, None]:
-
-        # Check if the 'dashboards' directory exists in the specified directory.
-        # TODO ??exclude .venv hardcoded to reduce lookup time?
-        try:
-            dashboards_dir = os.path.join(directory, 'dashboards')
-            if os.path.exists(dashboards_dir) and os.path.isdir(dashboards_dir):
-                return dashboards_dir
-        except (OSError, PermissionError) as e:
-            print(f"Error while checking directory '{directory}': {e}")
-            return None
+        self.start_path = start_path
 
     def find_dashboards_dir(self) -> str:
         """
@@ -42,6 +30,18 @@ class DashboardFinder:
             valid_path = self._validate_directory(root)
             if valid_path:
                 return valid_path
+
+    def _validate_directory(self, directory: str) -> Union[str, None]:
+
+        # Check if the 'dashboards' directory exists in the specified directory.
+        # TODO ??exclude .venv hardcoded to reduce lookup time?
+        try:
+            dashboards_dir = os.path.join(directory, 'dashboards')
+            if os.path.exists(dashboards_dir) and os.path.isdir(dashboards_dir):
+                return dashboards_dir
+        except (OSError, PermissionError) as e:
+            print(f"Error while checking directory '{directory}': {e}")
+            return None
 
 
 class YamlParser:

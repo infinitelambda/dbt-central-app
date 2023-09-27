@@ -1,5 +1,4 @@
 import os
-import subprocess
 from pathlib import Path
 from typing import Tuple
 
@@ -52,25 +51,6 @@ class CacheDirectoryManager:
         else:
             return True, f"{self.cache_directory_path} already exists."
 
-    def download_cache_files(self, metric_name: str) -> Tuple[bool, str]:
-        """
-        Download cache files using 'mf query' and save them to the .cache directory.
 
-        Note: Make sure 'mf' command-line tool is available and properly configured.
-
-        Args:
-             metric_name (str): The name of the metric to download.
-
-        Returns:
-            Tuple[bool, str]: A tuple containing a boolean indicating success (True if the download was
-            successful, False otherwise), and a message string indicating the result or any errors.
-        """
-        # package_name = "dbt-tpch"; metric_name = "tpch_count_orders" # example values
-        cache_file_path = os.path.join(self.cache_directory_path, f"{metric_name}.csv")
-
-        try:
-            subprocess.run([f"mf query --metrics {metric_name} --csv {cache_file_path}"],
-                           capture_output=True, check=True, shell=True)
-            return True, f"Downloaded {metric_name}.csv to {cache_file_path}"
-        except subprocess.CalledProcessError as e:
-            return False, f"Error downloading {metric_name}.csv: {e}"
+if __name__ == '__main__':
+    CacheDirectoryManager().create_cache_directory()

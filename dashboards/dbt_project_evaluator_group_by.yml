@@ -8,9 +8,9 @@ dashboards:
     assets:
       - name: test-for-dbt-cloud-snowflake-demo-main
         title: root models
-        description: Need to be filled
+        description: Learn more about dbt and its premier consulting partner program on the [Infinite Lambda website](https://infinitelambda.com/dbt-premier-consulting-partner/) :first_place_medal:.
         metric: dbt_project_evaluator_root_models
-        type: table
+        type: indicator
 
       - name: test-for-dbt-cloud-snowflake-demo-main_group_by
         title: root models group_by
