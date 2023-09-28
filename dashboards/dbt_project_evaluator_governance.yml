@@ -1,0 +1,34 @@
+dashboards:
+  - name: dbt project evaluator - Governance
+    title: Dashboard for dbt project evaluator [Github repository](https://github.com/dbt-labs/dbt-project-evaluator/)
+    description: |
+      Dashboards for dbt project evaluator develop & maintain by [Infinite Lambda](https://infinitelambda.com/dbt-premier-consulting-partner/) :first_place_medal:.
+      👉 [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/)
+    package_name: dbt_project_evaluator - Governance
+    assets:
+      - name: dpe_public_models_without_contract_group_by
+        title: Public models without contracts
+        description: |
+          fct_public_models_without_contract (source) shows each model with access configured as public, but is not a contracted model.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/governance/#public-models-without-contracts)
+        metric: met_dpe_public_models_without_contract
+        type: table
+        group by: ent_fct_public_models_without_contract__is_contract_enforced,ent_fct_public_models_without_contract__resource_name,ent_fct_public_models_without_contract__is_public
+
+      - name: dpe_undocumented_public_models_group_by
+        title: Undocumented public models
+        description: |
+          fct_undocumented_public_models (source) shows each model with access configured as public that is not fully documented. This check is similar to fct_undocumented_models (source), but is a stricter check that will highlight any public model that does not have a model-level description as well descriptions on each of its columns.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/governance/#undocumented-public-models)
+        metric: met_dpe_undocumented_public_models
+        type: table
+        group by: ent_fct_undocumented_public_models__total_defined_columns,ent_fct_undocumented_public_models__is_described,ent_fct_undocumented_public_models__access,ent_fct_undocumented_public_models__total_described_columns,ent_fct_undocumented_public_models__resource_name
+
+      - name: dpe_undocumented_public_models_group_by
+        title: Exposures dependent on private models
+        description: |
+          fct_exposures_dependent_on_private_models (source) shows each relationship between a resource and an exposure where the parent resource is not a model with access configured as public.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/governance/#exposures-dependent-on-private-models)
+        metric: met_dpe_exposures_dependent_on_private_models
+        type: table
+        group by: ent_fct_exposures_dependent_on_private_models
