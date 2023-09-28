@@ -1,0 +1,87 @@
+METRIC_TIME__MONTH,KEY__RULE_NAME,KEY__DATA_CONCEPT,KEY__DATA_ELEMENT,KEY__DQ_DIMENSION,DATA_QUALITY_SCORE
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.test_coverage,invocation_id,Completeness,
+2023-09-01,unique,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo.dim_suppliers,supplier_key,Uniqueness,1.000000000000
+2023-09-01,unique,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_staging.stg_tpch_part_suppliers,part_supplier_key,Uniqueness,1.000000000000
+2023-09-01,unique,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_staging.stg_tpch_orders,order_key,Uniqueness,1.000000000000
+2023-09-01,unique,snowflake_sample_data.tpch_sf1.part,p_partkey,Uniqueness,1.000000000000
+2023-09-01,relationships,snowflake_sample_data.tpch_sf1.lineitem,l_suppkey,Consistency,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.test_coverage,all_tested_columns,Completeness,
+2023-09-01,relationships,snowflake_sample_data.tpch_sf1.supplier,s_nationkey,Consistency,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_staging.stg_tpch_regions,region_key,Completeness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_dq_metrics,run_time,Completeness,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_dq_metrics,dq_dimension,Completeness,
+2023-09-01,unique,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo.part_suppliers,part_supplier_key,Uniqueness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.test_coverage,column_coverage_pct,Completeness,
+2023-09-01,not null,snowflake_sample_data.tpch_sf1.orders,o_orderkey,Completeness,1.000000000000
+2023-09-01,not null,snowflake_sample_data.tpch_sf1.part,p_partkey,Completeness,1.000000000000
+2023-09-01,accepted values,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_dq_metrics,dq_dimension,Accuracy,
+2023-09-01,relationships,snowflake_sample_data.tpch_sf1.lineitem,l_orderkey,Consistency,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_column_analysis,analysis_name,Completeness,
+2023-09-01,unique,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo.dim_parts,part_key,Uniqueness,1.000000000000
+2023-09-01,relationships,snowflake_sample_data.tpch_sf1.orders,o_custkey,Consistency,1.000000000000
+2023-09-01,unique,snowflake_sample_data.tpch_sf1.region,r_regionkey,Uniqueness,1.000000000000
+2023-09-01,unique,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.test_coverage,invocation_id,Uniqueness,
+2023-09-01,unique,snowflake_sample_data.tpch_sf1.supplier,s_suppkey,Uniqueness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.test_coverage,model_coverage_pct,Completeness,
+2023-09-01,accepted values,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_column_analysis,indicator_category,Accuracy,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_column_analysis,indicator_value,Completeness,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.test_coverage,all_tested_tables,Completeness,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_staging.stg_tpch_line_items,order_item_key,Completeness,1.000000000000
+2023-09-01,unique,snowflake_sample_data.tpch_sf1.nation,n_nationkey,Uniqueness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo.dim_customers,customer_key,Completeness,1.000000000000
+2023-09-01,expression is true,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_dq_metrics,rows_failed,Validity,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_dq_metrics,rows_processed,Completeness,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_column_analysis,kpi_category,Completeness,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_dq_metrics,rule_name,Completeness,
+2023-09-01,unique,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_staging.stg_tpch_line_items,order_item_key,Uniqueness,1.000000000000
+2023-09-01,expression is true,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_dq_metrics,rows_processed,Validity,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.test_coverage,coverage_pct,Completeness,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo.dim_parts,part_key,Completeness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.test_coverage,all_tables,Completeness,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_dq_metrics,data_concept,Completeness,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_column_analysis,rows_processed,Completeness,
+2023-09-01,accepted values,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_dq_metrics,indicator_category,Accuracy,
+2023-09-01,unique,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_staging.stg_tpch_regions,region_key,Uniqueness,1.000000000000
+2023-09-01,unique,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo.fct_orders,order_key,Uniqueness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo.fct_orders,order_key,Completeness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo.dim_suppliers,supplier_key,Completeness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_dq_metrics,rows_failed,Completeness,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_column_analysis,table_name,Completeness,
+2023-09-01,not null,snowflake_sample_data.tpch_sf1.nation,n_nationkey,Completeness,1.000000000000
+2023-09-01,accepted values,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_column_analysis,kpi_category,Accuracy,
+2023-09-01,unique,snowflake_sample_data.tpch_sf1.orders,o_orderkey,Uniqueness,1.000000000000
+2023-09-01,not null,snowflake_sample_data.tpch_sf1.customer,c_custkey,Completeness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.test_coverage,column_record_coverage_pct,Completeness,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.test_coverage,check_timestamp,Completeness,
+2023-09-01,unique,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_staging.stg_tpch_nations,nation_key,Uniqueness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_staging.stg_tpch_parts,part_key,Completeness,1.000000000000
+2023-09-01,relationships,snowflake_sample_data.tpch_sf1.nation,n_regionkey,Consistency,1.000000000000
+2023-09-01,relationships,snowflake_sample_data.tpch_sf1.partsupp,ps_partkey,Consistency,1.000000000000
+2023-09-01,relationships,snowflake_sample_data.tpch_sf1.lineitem,l_partkey,Consistency,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_staging.stg_tpch_part_suppliers,part_supplier_key,Completeness,1.000000000000
+2023-09-01,not null,snowflake_sample_data.tpch_sf1.supplier,s_suppkey,Completeness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo.part_suppliers,part_supplier_key,Completeness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_staging.stg_tpch_suppliers,supplier_key,Completeness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.test_coverage,all_columns,Completeness,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.test_coverage,test_count,Completeness,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_staging.stg_tpch_nations,nation_key,Completeness,1.000000000000
+2023-09-01,unique,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo.dim_customers,customer_key,Uniqueness,1.000000000000
+2023-09-01,business test,,,Validity,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_column_analysis,indicator_category,Completeness,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo.order_items,order_item_key,Completeness,1.000000000000
+2023-09-01,unique,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo.fct_order_items,order_item_key,Uniqueness,1.000000000000
+2023-09-01,not null,snowflake_sample_data.tpch_sf1.region,r_regionkey,Completeness,1.000000000000
+2023-09-01,relationships,snowflake_sample_data.tpch_sf1.partsupp,ps_suppkey,Consistency,1.000000000000
+2023-09-01,unique,snowflake_sample_data.tpch_sf1.customer,c_custkey,Uniqueness,1.000000000000
+2023-09-01,relationships,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo.fct_orders,customer_key,Consistency,1.000000000000
+2023-09-01,accepted values,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo.dim_customers,region,Accuracy,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_staging.stg_tpch_customers,customer_key,Completeness,1.000000000000
+2023-09-01,unique,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_staging.stg_tpch_customers,customer_key,Uniqueness,1.000000000000
+2023-09-01,unique,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_staging.stg_tpch_suppliers,supplier_key,Uniqueness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_column_analysis,run_time,Completeness,
+2023-09-01,unique,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo.order_items,order_item_key,Uniqueness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_staging.stg_tpch_orders,order_key,Completeness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo.fct_order_items,order_item_key,Completeness,1.000000000000
+2023-09-01,unique,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_staging.stg_tpch_parts,part_key,Uniqueness,1.000000000000
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.test_coverage,test_to_column_ratio,Completeness,
+2023-09-01,not null,DBT_CLOUD_DEMO_SNOWFLAKE.adrien_dbt_cloud_demo_dq_tools.bi_dq_metrics,indicator_category,Completeness,

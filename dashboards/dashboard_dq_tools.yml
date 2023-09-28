@@ -1,0 +1,60 @@
+dashboards:
+  - name: Data Quality Tools Dashboard
+    title: Data Quality Overview
+    description: |
+      Make simple storing test results and visualisation of these in a BI dashboard.
+      👉 [Data Quality Tools](https://infinitelambda.github.io/dq-tools/) 
+    package_name: dq-tools
+    assets:
+      - name: Data Quality Score
+        title: Data Quality Score
+        description: Average value of `records_passed / records_scanned`
+        metric: data_quality_score
+        type: indicator
+        # mf query --metrics data_quality_score
+
+      - name: Data Quality Score over Time
+        title: Data Quality Score over Time
+        description: Average scoring every day
+        metric: data_quality_score
+        type: line_chart
+        sort_by: METRIC_TIME__MONTH
+        ascending: True
+        x: METRIC_TIME__MONTH
+        y: DATA_QUALITY_SCORE
+        # mf query --metrics data_quality_score --group-by metric_time__month
+
+      - name: Data Quality Score - Completeness
+        title: 🏁 Completeness
+        description: Average value of `records_passed / records_scanned` where the KPI is `Completeness`
+        metric: data_quality_score
+        type: indicator
+        # mf query --metrics data_quality_score --where "{{Dimension('key__dq_dimension')}} = 'Completeness'"
+
+      - name: Data Quality Score - Uniqueness
+        title: ⭐ Uniqueness
+        description: Average value of `records_passed / records_scanned` where the KPI is `Uniqueness`
+        metric: data_quality_score
+        type: indicator
+        # mf query --metrics data_quality_score --where "{{Dimension('key__dq_dimension')}} = 'Uniqueness'"
+
+      - name: Data Quality Score - Consistency
+        title: 📌 Consistency
+        description: Average value of `records_passed / records_scanned` where the KPI is `Consistency`
+        metric: data_quality_score
+        type: indicator
+        # mf query --metrics data_quality_score --where "{{Dimension('key__dq_dimension')}} = 'Consistency'"
+
+      - name: Data Quality Score - Accuracy
+        title: ✅ Accuracy
+        description: Average value of `records_passed / records_scanned` where the KPI is `Accuracy`
+        metric: data_quality_score
+        type: indicator
+        # mf query --metrics data_quality_score --where "{{Dimension('key__dq_dimension')}} = 'Accuracy'"
+
+      - name: Data Quality Score - Timeliness
+        title: 📅 Timeliness
+        description: Average value of `records_passed / records_scanned` where the KPI is `Timeliness`
+        metric: data_quality_score
+        type: indicator
+        # mf query --metrics data_quality_score --where "{{Dimension('key__dq_dimension')}} = 'Timeliness'"
