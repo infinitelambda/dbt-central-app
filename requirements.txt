@@ -1,3 +1,4 @@
 streamlit
 pandas
 PyYAML
+streamlit_option_menu

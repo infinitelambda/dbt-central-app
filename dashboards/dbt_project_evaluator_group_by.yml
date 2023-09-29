@@ -17,4 +17,5 @@ dashboards:
         description: Need to be filled
         metric: dbt_project_evaluator_root_models
         type: table
+        transposed: True
         group by: fct_root_models__child,fct_root_models__current_date,metric_time
