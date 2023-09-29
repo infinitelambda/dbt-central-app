@@ -1,6 +1,6 @@
-from src.utils.assets import AssetStreamlitChartMap
-from src.utils.cache import Cache
-from src.utils.utils import YamlParser, DashboardFinder
+from utils.assets import AssetStreamlitChartMap
+from utils.cache import Cache
+from utils.utils import YamlParser, DashboardFinder
 
 import streamlit
 
@@ -43,7 +43,7 @@ class App:
         dashboard_idx, assets = pages.get(option)
         dashboard_spec = self.ctx[dashboard_idx]
         streamlit.title(dashboard_spec.get("name"))  # dashboard name
-        streamlit.text(dashboard_spec.get("description"))  # dashboard description
+        streamlit.markdown(dashboard_spec.get("description"))  # dashboard description
         for asset in assets:
             streamlit.header(asset.spec.get("title"))
             streamlit.markdown(asset.spec.get("description"))

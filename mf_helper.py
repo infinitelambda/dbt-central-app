@@ -31,9 +31,6 @@ class MfHelper:
                 group_by = asset.get("group by")
                 if asset_name and metric_name:
                     asset_info.append((asset_name, metric_name, group_by))
-            # temporary for testing. All sample yaml contains asset with and without a group_by in the first 2 place
-                if num_of_ass == 1:
-                    break
         return asset_info
 
     def create_cache_directory(self, package_name: Union[str, None] = None) -> Tuple[bool, str]:

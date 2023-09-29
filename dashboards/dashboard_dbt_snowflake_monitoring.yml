@@ -1,0 +1,42 @@
+dashboards:
+  - name: Snowflake Cost Monitoring for dbt
+    title: Snowflake Cost Overview
+    description: |
+      A dbt package from SELECT to help you monitor Snowflake performance and costs.
+      
+      👉 [Optimize your dbt usage](https://select.dev/docs/dbt-snowflake-monitoring) 
+    package_name: dbt_snowflake_monitoring
+    assets:
+      - name: This Month Cost
+        title: This Month Cost
+        description: Total 💰 credit cost on this month so far
+        metric: met_smc_daily_spend
+        type: indicator
+        # mf query --metrics met_smc_daily_spend --where "{{Dimension('ent_daily_spend__date__day')}} = '2023-09-01'" ? NOT WORKING
+
+      - name: Monthly Cost
+        title: Monthly Cost
+        description: Total 💰 cost on Monthly Basis
+        metric: met_smc_daily_spend
+        type: line_chart
+        sort_by: METRIC_TIME__MONTH
+        ascending: True
+        x: METRIC_TIME__MONTH
+        y:
+          - MET_SMC_DAILY_SPEND
+          - MET_SMC_DAILY_RATES
+        # mf query --metrics met_smc_daily_spend,met_smc_daily_rates --group-by metric_time__month --order metric_time__month
+
+      - name: Cost by Service
+        title: Top 5 - Cost by Service
+        description: Total 💰 cost by Service
+        metric: met_cost_per_query
+        type: table
+        # mf query --metrics met_smc_daily_spend --group-by ent_daily_spend__service --order -met_smc_daily_spend --limit 5
+
+      - name: Credit Map
+        title: Credit mapping with the Warehouse Size
+        description: Mapping between the number of credit cost vs the warehouse size
+        metric: met_smc_warehouse_credits_map
+        type: table
+        # mf query --metrics met_smc_warehouse_credits_map --group-by ent_warehouse_credits_map__warehouse_size
