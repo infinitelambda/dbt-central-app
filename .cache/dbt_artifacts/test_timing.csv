@@ -1,0 +1,6 @@
+ENT_MODEL_EXCUTION__NAME,MET_DA_MODEL_TIMING
+test_functionnal_rule_01,45.880624055862427
+unique_dim_customers_customer_key,2.233451232221323
+not_null_dim_customers_customer_key,1.000000000000000
+accepted_values_dim_customers_region__AFRICA__MIDDLE_EAST,1.000000000000000
+unique_dim_parts_part_key,0.300000000000000

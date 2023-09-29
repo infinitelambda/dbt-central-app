@@ -3,6 +3,7 @@ dashboards:
     title: Snowflake Cost Overview
     description: |
       A dbt package from SELECT to help you monitor Snowflake performance and costs.
+      
       👉 [Optimize your dbt usage](https://select.dev/docs/dbt-snowflake-monitoring) 
     package_name: dbt_snowflake_monitoring
     assets:
