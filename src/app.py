@@ -44,12 +44,15 @@ class App:
             return package_name
 
         packages = [dashboard.get("package_name") for dashboard in self.ctx]
+
+        sorted_packages = sorted(packages)
+
         with streamlit.sidebar:
             streamlit.title("dbt Dashboards")
             streamlit.subheader("A central place for all your dbt related metrics.")
             option = streamlit.selectbox(
                 "Select a dbt package from the list below.",
-                options=packages,
+                options=sorted_packages,
                 format_func=get_package_option_display,
             )
 
