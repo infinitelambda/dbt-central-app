@@ -61,7 +61,7 @@ class TableAsset(Asset):
 
 class IndicatorAsset(Asset):
     def chart(self, data: pd.DataFrame):
-        streamlit.metric(label=str(self.spec.get("title")), value=data.iloc[0, 0], label_visibility="collapsed")
+        streamlit.metric(label=str(self.spec.get("title")), value=data.iloc[0, 0], label_visibility="visible")
 
 
 class AssetStreamlitChartMap:
