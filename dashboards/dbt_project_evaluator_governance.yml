@@ -4,7 +4,7 @@ dashboards:
     description: |
       Dashboards for dbt project evaluator develop & maintain by [Infinite Lambda](https://infinitelambda.com/dbt-premier-consulting-partner/) :first_place_medal:.
       👉 [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/)
-    package_name: dbt_project_evaluator - Governance
+    package_name: dbt_project_evaluator_governance
     assets:
       - name: dpe_public_models_without_contract_group_by
         title: Public models without contracts

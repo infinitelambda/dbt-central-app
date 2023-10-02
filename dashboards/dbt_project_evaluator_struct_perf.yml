@@ -4,7 +4,7 @@ dashboards:
     description: |
       Dashboards for dbt project evaluator develop & maintain by [Infinite Lambda](https://infinitelambda.com/dbt-premier-consulting-partner/) :first_place_medal:.
       👉 [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/)
-    package_name: dbt_project_evaluator - Structure & Performance
+    package_name: dbt_project_evaluator_struct_perf
     assets:
       - name: dpe_model_naming_conventions_group_by
         title: Model Naming Conventions
