@@ -33,11 +33,25 @@ class App:
                 assets.append(asset(self.cache, dashboard_spec, asset_spec))
 
         # Display sidebar
+        def get_package_option_display(package_name):
+            find_package = [
+                dashboard.get("name")
+                for dashboard in self.ctx
+                if dashboard.get("package_name") == package_name
+            ]
+            if find_package:
+                return find_package[0]
+            return package_name
+
         packages = [dashboard.get("package_name") for dashboard in self.ctx]
         with streamlit.sidebar:
             streamlit.title("dbt Dashboards")
             streamlit.subheader("A central place for all your dbt related metrics.")
-            option = streamlit.selectbox("Select a dbt package from the list below.", packages)
+            option = streamlit.selectbox(
+                "Select a dbt package from the list below.",
+                options=packages,
+                format_func=get_package_option_display,
+            )
 
         # Display dashboard selected by the sidebar
         dashboard_idx, assets = pages.get(option)
@@ -51,5 +65,5 @@ class App:
             streamlit.divider()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     App().run()
