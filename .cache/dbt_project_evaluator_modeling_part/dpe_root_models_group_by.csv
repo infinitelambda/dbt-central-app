@@ -1,0 +1,14 @@
+ENT_FCT_ROOT_MODELS__CHILD,MET_DPE_ROOT_MODELS
+seed_executions,1
+sources,1
+snapshots,1
+warehouse_credits_map,1
+model_executions,1
+models,1
+test_executions,1
+dq_issue_log,1
+tests,1
+snapshot_executions,1
+seeds,1
+exposures,1
+invocations,1

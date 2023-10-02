@@ -1,0 +1,5 @@
+ENT_FCT_UNDOCUMENTED_MODELS__RESOURCE_NAME,ENT_FCT_UNDOCUMENTED_MODELS__MODEL_TYPE,MET_DPE_UNDOCUMENTED_MODELS
+stg_usage_in_currency_daily,staging,1
+metricflow_time_spine,other,1
+incremental_dim_orders,other,1
+remaining_balance_daily_without_contract_view,other,1
