@@ -1,0 +1,21 @@
+dashboards:
+  - name: Dashboards for tesing Semantic API
+    title: Dashboards for tesing Semantic API
+    description: Using JDBC Connection
+    package_name: test_semantic_api
+    assets:
+      - name: Test Coverage
+        title: Data Coverage by Tests
+        description: |
+          Value from `dbt_project_evaluator`'s metric named `test_coverage`.
+
+          Query:
+          ```
+          select  * 
+          from    {{ semantic_layer.query(
+                    metrics=["dbt_project_evaluator_test_coverage"
+                  ]) }}
+          ```
+        metric:
+          query: select * from {{ semantic_layer.query(metrics=["dbt_project_evaluator_test_coverage"]) }}
+        type: indicator
