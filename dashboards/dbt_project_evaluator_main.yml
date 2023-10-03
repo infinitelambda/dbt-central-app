@@ -1,0 +1,19 @@
+dashboards:
+  - name: dbt project evaluator -  Main KPIs
+    title: Dashboard for dbt project evaluator [Github repository](https://github.com/dbt-labs/dbt-project-evaluator/)
+    description: |
+      Dashboards for dbt project evaluator develop & maintain by [Infinite Lambda](https://infinitelambda.com/dbt-premier-consulting-partner/) :first_place_medal:.
+
+      👉 [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/)
+    package_name: dbt_project_evaluator_main
+    assets:
+      - name: dpe_test_coverage_over_time
+        title: Test % coverage
+        description: For more details information see [tests detail](http://localhost:8501/#test-coverage)
+        metric: met_dpe_test_coverage
+        type: indicator
+      - name: dpe_documentation_coverage
+        title: Documentation % coverage
+        description: For more details information see [tests detail](http://localhost:8501/#documentation-coverage)
+        metric: met_dpe_documentation_coverage
+        type: indicator

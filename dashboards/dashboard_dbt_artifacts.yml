@@ -1,16 +1,45 @@
 version: 2
 
 dashboards:
-  - name: dashboard_dbt_artifact
-    description: Dashboard which contains informations about KPIs to display
-    package_name: dbt_project_artifact
-    title: dbt project artifact dashboards
+  - name: dbt artifacts - Metadata Observability
+    title: Metadata analysis of the dbt project
+    description: |
+      A dbt package for modelling dbt metadata.
+
+      👉 Check the [dbt docs site](https://brooklyn-data.github.io/dbt_artifacts)
+    package_name: dbt_artifacts
     assets:
-      - name: doc_artifact_coverage
-        title: Documentation coverage on the last run
-        metric: non_esistent
-        type: line_chart
-        sort_by: TPCH_COUNT_ORDERS
-        ascending: True
-        x: METRIC_TIME__MONTH
-        y: TPCH_COUNT_ORDERS
+      - name: Model Timing
+        title: 🐌 Top 5 Slowest Models
+        description: Average timing taken by each model
+        metric: met_da_model_timing
+        type: table
+        sort_by: MET_DA_MODEL_TIMING
+        ascending: False
+        # mf query --metrics met_da_model_timing --group-by ent_model_excution__name  --order -met_da_model_timing --limit 5
+
+      - name: Test Timing
+        title: 🐌 Top 5 Costed Test Cases
+        description: Average timing taken by each test case
+        metric: met_da_test_timing # not specified yet
+        type: table
+        sort_by: MET_DA_TEST_TIMING
+        ascending: False
+        # mf query --metrics met_da_test_timing --group-by ent_model_excution__name  --order -met_da_model_timing --limit 5
+
+      - name: Last Executions
+        title: 👀 Last Executions
+        description: Describe the number of steps executed in the last executions (only 20 rows displayed)
+        metric: met_da_last_execution
+        group by: ent_dbt_invocation__dbt_run_id,ent_dbt_invocation__dbt_run_step_id,ent_dbt_invocation__dbt_run_step_command,ent_dbt_invocation__dbt_cloud_run_url
+        type: table
+        sort_by: metric_time
+        # mf query --metrics met_da_last_execution --group-by ent_dbt_invocation__dbt_run_id,ent_dbt_invocation__dbt_run_step_id,ent_dbt_invocation__dbt_run_step_command,ent_dbt_invocation__dbt_cloud_run_url --order -met_da_last_execution --limit 20
+
+      - name: Invocation Count
+        title: 🔎 Number of Invocation triggered over Time?
+        description: Number of dbt invocation
+        metric: met_da_invocation_count
+        type: table
+        sort_by: METRIC_TIME__DAY
+        # mf query --metrics met_da_invocation_count --group-by metric_time

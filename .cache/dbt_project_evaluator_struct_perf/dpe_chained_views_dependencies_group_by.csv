@@ -1,0 +1,190 @@
+ENT_FCT_CHAINED_VIEWS_DEPENDENCIES__PATH,ENT_FCT_CHAINED_VIEWS_DEPENDENCIES__PARENT,ENT_FCT_CHAINED_VIEWS_DEPENDENCIES__DISTANCE,ENT_FCT_CHAINED_VIEWS_DEPENDENCIES__CHILD,MET_DPE_CHAINED_VIEWS_DEPENDENCIES
+"[
+  ""stg_tpch_part_suppliers"",
+  ""part_suppliers"",
+  ""fct_order_items""
+]",stg_tpch_part_suppliers,2,fct_order_items,1
+"[
+  ""bi_column_analysis"",
+  ""bi_dq_metrics""
+]",bi_column_analysis,1,bi_dq_metrics,1
+"[
+  ""stg_tpch_orders"",
+  ""order_items"",
+  ""fct_order_items""
+]",stg_tpch_orders,2,fct_order_items,1
+"[
+  ""stg_dbt__models"",
+  ""dim_dbt__current_models""
+]",stg_dbt__models,1,dim_dbt__current_models,1
+"[
+  ""stg_dbt__test_executions"",
+  ""fct_dbt__test_executions""
+]",stg_dbt__test_executions,1,fct_dbt__test_executions,1
+"[
+  ""stg_tpch_orders"",
+  ""order_items""
+]",stg_tpch_orders,1,order_items,1
+"[
+  ""stg_dbt__snapshot_executions"",
+  ""fct_dbt__snapshot_executions""
+]",stg_dbt__snapshot_executions,1,fct_dbt__snapshot_executions,1
+"[
+  ""stg_dbt__tests"",
+  ""dim_dbt__tests""
+]",stg_dbt__tests,1,dim_dbt__tests,1
+"[
+  ""stg_tpch_nations"",
+  ""dim_customers""
+]",stg_tpch_nations,1,dim_customers,1
+"[
+  ""stg_tpch_regions"",
+  ""dim_customers""
+]",stg_tpch_regions,1,dim_customers,1
+"[
+  ""stg_tpch_line_items"",
+  ""order_items"",
+  ""fct_order_items""
+]",stg_tpch_line_items,2,fct_order_items,1
+"[
+  ""stg_tpch_parts"",
+  ""part_suppliers"",
+  ""fct_order_items""
+]",stg_tpch_parts,2,fct_order_items,1
+"[
+  ""stg_tpch_orders"",
+  ""incremental_dim_orders""
+]",stg_tpch_orders,1,incremental_dim_orders,1
+"[
+  ""stg_database_storage_usage_history"",
+  ""hourly_spend""
+]",stg_database_storage_usage_history,1,hourly_spend,1
+"[
+  ""stg_tpch_orders"",
+  ""order_items"",
+  ""incremental_dim_orders""
+]",stg_tpch_orders,2,incremental_dim_orders,1
+"[
+  ""stg_tpch_nations"",
+  ""dim_suppliers""
+]",stg_tpch_nations,1,dim_suppliers,1
+"[
+  ""order_items"",
+  ""incremental_dim_orders""
+]",order_items,1,incremental_dim_orders,1
+"[
+  ""stg_tpch_regions"",
+  ""dim_suppliers""
+]",stg_tpch_regions,1,dim_suppliers,1
+"[
+  ""order_items"",
+  ""fct_order_items""
+]",order_items,1,fct_order_items,1
+"[
+  ""stg_dbt__sources"",
+  ""dim_dbt__sources""
+]",stg_dbt__sources,1,dim_dbt__sources,1
+"[
+  ""stg_tpch_orders"",
+  ""fct_orders""
+]",stg_tpch_orders,1,fct_orders,1
+"[
+  ""stg_usage_in_currency_daily"",
+  ""hourly_spend""
+]",stg_usage_in_currency_daily,1,hourly_spend,1
+"[
+  ""stg_tpch_suppliers"",
+  ""dim_suppliers""
+]",stg_tpch_suppliers,1,dim_suppliers,1
+"[
+  ""stg_dbt__seeds"",
+  ""dim_dbt__seeds""
+]",stg_dbt__seeds,1,dim_dbt__seeds,1
+"[
+  ""stg_dbt__model_executions"",
+  ""dim_dbt__current_models""
+]",stg_dbt__model_executions,1,dim_dbt__current_models,1
+"[
+  ""stg_tpch_suppliers"",
+  ""part_suppliers"",
+  ""fct_order_items""
+]",stg_tpch_suppliers,2,fct_order_items,1
+"[
+  ""stg_dbt__exposures"",
+  ""dim_dbt__exposures""
+]",stg_dbt__exposures,1,dim_dbt__exposures,1
+"[
+  ""stg_tpch_line_items"",
+  ""order_items"",
+  ""fct_orders""
+]",stg_tpch_line_items,2,fct_orders,1
+"[
+  ""stg_stage_storage_usage_history"",
+  ""hourly_spend""
+]",stg_stage_storage_usage_history,1,hourly_spend,1
+"[
+  ""stg_dbt__models"",
+  ""dim_dbt__models""
+]",stg_dbt__models,1,dim_dbt__models,1
+"[
+  ""stg_dbt__invocations"",
+  ""fct_dbt__invocations""
+]",stg_dbt__invocations,1,fct_dbt__invocations,1
+"[
+  ""stg_tpch_line_items"",
+  ""order_items""
+]",stg_tpch_line_items,1,order_items,1
+"[
+  ""stg_tpch_suppliers"",
+  ""part_suppliers""
+]",stg_tpch_suppliers,1,part_suppliers,1
+"[
+  ""stg_tpch_line_items"",
+  ""order_items"",
+  ""incremental_dim_orders""
+]",stg_tpch_line_items,2,incremental_dim_orders,1
+"[
+  ""stg_dbt__model_executions"",
+  ""fct_dbt__model_executions""
+]",stg_dbt__model_executions,1,fct_dbt__model_executions,1
+"[
+  ""stg_dbt__seed_executions"",
+  ""fct_dbt__seed_executions""
+]",stg_dbt__seed_executions,1,fct_dbt__seed_executions,1
+"[
+  ""stg_tpch_orders"",
+  ""order_items"",
+  ""fct_orders""
+]",stg_tpch_orders,2,fct_orders,1
+"[
+  ""stg_tpch_parts"",
+  ""part_suppliers""
+]",stg_tpch_parts,1,part_suppliers,1
+"[
+  ""stg_tpch_parts"",
+  ""dim_parts""
+]",stg_tpch_parts,1,dim_parts,1
+"[
+  ""stg_metering_daily_history"",
+  ""hourly_spend""
+]",stg_metering_daily_history,1,hourly_spend,1
+"[
+  ""stg_tpch_part_suppliers"",
+  ""part_suppliers""
+]",stg_tpch_part_suppliers,1,part_suppliers,1
+"[
+  ""part_suppliers"",
+  ""fct_order_items""
+]",part_suppliers,1,fct_order_items,1
+"[
+  ""stg_dbt__snapshots"",
+  ""dim_dbt__snapshots""
+]",stg_dbt__snapshots,1,dim_dbt__snapshots,1
+"[
+  ""remaining_balance_daily_without_contract_view"",
+  ""daily_rates""
+]",remaining_balance_daily_without_contract_view,1,daily_rates,1
+"[
+  ""order_items"",
+  ""fct_orders""
+]",order_items,1,fct_orders,1

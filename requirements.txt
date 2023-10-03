@@ -2,3 +2,4 @@ streamlit
 pandas
 PyYAML
 streamlit_option_menu
+adbc-driver-flightsql

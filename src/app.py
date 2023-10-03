@@ -1,3 +1,6 @@
+import os
+
+from utils.semantic import SemanticHelper
 from utils.assets import AssetStreamlitChartMap
 from utils.cache import Cache
 from utils.utils import YamlParser, DashboardFinder
@@ -10,6 +13,7 @@ class App:
     def __init__(self):
         self.ctx = self._load_context()
         self.cache = self._load_cache()
+        self.semantic_api = self._load_semantic_api()
 
     def _load_context(self):
         finder = DashboardFinder()
@@ -21,6 +25,12 @@ class App:
     def _load_cache(self):
         return Cache()
 
+    def _load_semantic_api(self):
+        url = os.environ.get("DBT_SEMANTIC_URL")
+        if url:
+            return SemanticHelper(url=url)
+        return None
+
     def run(self):
         # Generate dashboard objects
         pages = dict()
@@ -31,7 +41,7 @@ class App:
             pages[package_name] = (idx, assets)
             for asset_spec in dashboard_spec.get("assets"):
                 asset = AssetStreamlitChartMap.chart.get(asset_spec.get("type"))
-                assets.append(asset(self.cache, dashboard_spec, asset_spec))
+                assets.append(asset(self.cache, dashboard_spec, asset_spec, self.semantic_api))
 
         # Layout
         st.set_page_config(
@@ -81,9 +91,10 @@ class App:
         if selected == "Dashboards":
             # Display sidebar
             packages = [dashboard.get("package_name") for dashboard in self.ctx]
+            sorted_packages = sorted(packages)
             dash_sidebar = st.sidebar
             with dash_sidebar:
-                option = st.selectbox("Select a dbt package from the list below.", packages)
+                option = st.selectbox("Select a dbt package from the list below.", sorted_packages)
                 st.write('')  # for vertical positioning
                 st.write('')
                 st.write('')

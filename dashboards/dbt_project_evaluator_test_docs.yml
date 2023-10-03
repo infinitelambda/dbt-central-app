@@ -1,0 +1,49 @@
+dashboards:
+  - name: dbt project evaluator - Testing & Docs
+    title: Dashboard for dbt project evaluator [Github repository](https://github.com/dbt-labs/dbt-project-evaluator/)
+    description: |
+      Dashboards for dbt project evaluator develop & maintain by [Infinite Lambda](https://infinitelambda.com/dbt-premier-consulting-partner/) :first_place_medal:.
+      👉 [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/)
+    package_name: dbt_project_evaluator_doc_test
+    assets:
+      - name: dpe_missing_primary_key_tests
+        title: Missing Primary Key Tests
+        description: |
+          fct_missing_primary_key_tests (source) lists every model that does not meet the minimum testing requirement of testing primary keys. Any model that does not have either
+          - a not_null test and a unique test applied to a single column OR
+          - a dbt_utils.unique_combination_of_columns test applied to a set of columns
+          will be flagged by this model.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/testing/#missing-primary-key-tests)
+        metric: met_dpe_missing_primary_key_tests
+        type: table
+        group by: ent_fct_missing_primary_key_tests__model_type,ent_fct_missing_primary_key_tests__is_primary_key_tested,ent_fct_missing_primary_key_tests__resource_type,ent_fct_missing_primary_key_tests__resource_name
+
+      - name: dpe_test_coverage_group_by
+        title: Test Coverage
+        description: |
+          fct_test_coverage (source) contains metrics pertaining to project-wide test coverage. Specifically, this models measures:
+          - test_coverage_pct: the percentage of your models that have minimum 1 test applied.
+          - test_to_model_ratio: the ratio of the number of tests in your dbt project to the number of models in your dbt project
+          - <model_type>_test_coverage_pct: the percentage of each of your model types that have minimum 1 test applied.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/testing/#test-coverage)
+        metric: met_dpe_test_coverage
+        type: table
+        group by: ent_fct_test_coverage__total_tests,ent_fct_test_coverage__intermediate_test_coverage_pct,ent_fct_test_coverage__tested_models,ent_fct_test_coverage__marts_test_coverage_pct,ent_fct_test_coverage__total_models,ent_fct_test_coverage__measured_at,ent_fct_test_coverage__test_to_model_ratio,ent_fct_test_coverage__staging_test_coverage_pct,ent_fct_test_coverage__test_coverage_pct,ent_fct_test_coverage__other_test_coverage_pct
+
+      - name: dpe_documentation_coverage_group_by
+        title: Documentation Coverage
+        description: |
+          fct_documentation_coverage (source) calculates the percent of enabled models in the project that have a configured description.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/documentation/#documentation-coverage)
+        metric: met_dpe_documentation_coverage
+        type: table
+        group by: ent_fct_documentation_coverage__measured_at,ent_fct_documentation_coverage__documentation_coverage_pct,ent_fct_documentation_coverage__documented_models,ent_fct_documentation_coverage__other_documentation_coverage_pct,ent_fct_documentation_coverage__intermediate_documentation_coverage_pct,ent_fct_documentation_coverage__total_models,ent_fct_documentation_coverage__staging_documentation_coverage_pct,ent_fct_documentation_coverage__marts_documentation_coverage_pct
+
+      - name: dpe_undocumented_models_group_by
+        title: Undocumented Models
+        description: |
+          fct_undocumented_models (source) lists every model with no description configured.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/documentation/#undocumented-models)
+        metric: met_dpe_undocumented_models
+        type: table
+        group by: ent_fct_undocumented_models__resource_name,ent_fct_undocumented_models__model_type

@@ -1,0 +1,115 @@
+dashboards:
+  - name: dbt project evaluator - Modeling
+    title: Dashboard for dbt project evaluator [Github repository](https://github.com/dbt-labs/dbt-project-evaluator/)
+    description: |
+      Dashboards for dbt project evaluator develop & maintain by [Infinite Lambda](https://infinitelambda.com/dbt-premier-consulting-partner/) :first_place_medal:.
+      👉 [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/)
+    package_name: dbt_project_evaluator_modeling_part
+    assets:
+      - name: dpe_direct_join_to_source_group_by
+        title: List all model who has direct join to source
+        description: |
+          fct_direct_join_to_source (source) shows each parent/child relationship where a model has a reference to both a model and a source.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/modeling/#direct-join-to-source)
+        metric: met_dpe_direct_join_to_source
+        type: table
+        group by: ent_fct_direct_join_to_source__child,ent_fct_direct_join_to_source__child_resource_type,ent_fct_direct_join_to_source__parent_resource_type,ent_fct_direct_join_to_source__distance,ent_fct_direct_join_to_source__parent
+
+      - name: dpe_hard_coded_references_group_by
+        title: Hard Coded References
+        description: |
+          fct_hard_coded_references (source) shows each instance where a model contains hard coded reference(s).
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/modeling/#hard-coded-references)
+        metric: met_dpe_hard_coded_references
+        type: table
+        group by: ent_fct_hard_coded_references__hard_coded_references,ent_fct_hard_coded_references__model
+
+      - name: dpe_marts_or_intermediate_dependent_on_source_group_by
+        title: Downstream Models Dependent on Source
+        description: |
+          fct_marts_or_intermediate_dependent_on_source (source) shows each downstream model (marts or intermediate) that depends directly on a source node.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/modeling/#downstream-models-dependent-on-source)
+        metric: met_dpe_marts_or_intermediate_dependent_on_source
+        type: table
+        group by: ent_fct_marts_or_intermediate_dependent_on_source__child_model_type,ent_fct_marts_or_intermediate_dependent_on_source__parent_resource_type,ent_fct_marts_or_intermediate_dependent_on_source__parent,ent_fct_marts_or_intermediate_dependent_on_source__child
+
+      - name: dpe_duplicate_sources_group_by
+        title: Duplicate Sources
+        description: |
+          fct_duplicate_sources (source) shows each database object that corresponds to more than one source node.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/modeling/#duplicate-sources)
+        metric: met_dpe_duplicate_sources
+        type: table
+        group by: ent_fct_duplicate_sources__source_names,ent_fct_duplicate_sources__source_db_location
+
+      - name: dpe_model_fanout_group_by
+        title: Model Fanout
+        description: |
+          fct_model_fanout (source) shows all parents with more than 3 direct leaf children. You can set your own threshold for model fanout by overriding the models_fanout_threshold variable
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/modeling/#model-fanout)
+        metric: met_dpe_model_fanout
+        type: table
+        group by: ent_fct_model_fanout__parent_model_type,ent_fct_model_fanout__leaf_children,ent_fct_model_fanout__parent
+
+      - name: dpe_multiple_sources_joined_group_by
+        title: Multiple Sources Joined
+        description: |
+          fct_multiple_sources_joined (source) shows each instance where a model references more than one source.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/modeling/#multiple-sources-joined)
+        metric: met_dpe_multiple_sources_joined
+        type: table
+        group by: ent_fct_multiple_sources_joined__child,ent_fct_multiple_sources_joined__source_parents
+
+      - name: dpe_rejoining_of_upstream_concepts_group_by
+        title: Rejoining of Upstream Concepts
+        description: |
+          fct_rejoining_of_upstream_concepts (source) contains all cases where one of the parent's direct children is ALSO the direct child of ANOTHER one of the parent's direct children. Only includes cases where the model "in between" the parent and child has NO other downstream dependencies.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/modeling/#rejoining-of-upstream-concepts)
+        metric: met_dpe_rejoining_of_upstream_concepts
+        type: table
+        group by: ent_fct_rejoining_of_upstream_concepts__child,ent_fct_rejoining_of_upstream_concepts__parent_and_child,ent_fct_rejoining_of_upstream_concepts__parent,ent_fct_rejoining_of_upstream_concepts__is_loop_independent
+
+      - name: dpe_root_models_group_by
+        title: Root Models
+        description: |
+          fct_root_models (source) shows each model with 0 direct parents, meaning that the model cannot be traced back to a declared source or model in the dbt project.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/modeling/#root-models)
+        metric: met_dpe_root_models
+        type: table
+        group by: ent_fct_root_models__child
+
+      - name: dpe_source_fanout_group_by
+        title: Source Fanout
+        description: |
+          fct_source_fanout (source) shows each instance where a source is the direct parent of multiple resources in the DAG.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/modeling/#source-fanout)
+        metric: met_dpe_source_fanout
+        type: table
+        group by: ent_fct_source_fanout__parent,ent_fct_source_fanout__model_children
+
+      - name: dpe_staging_dependent_on_marts_or_intermediate_group_by
+        title: Staging Models Dependent on Downstream Models
+        description: |
+          fct_staging_dependent_on_marts_or_intermediate (source) shows each staging model that depends on an intermediate or marts model, as defined by the naming conventions and folder paths specified in your project variables.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/modeling/#staging-models-dependent-on-downstream-models)
+        metric: met_dpe_staging_dependent_on_marts_or_intermediate
+        type: table
+        group by: ent_fct_staging_dependent_on_marts_or_intermediate__parent_model_type,ent_fct_staging_dependent_on_marts_or_intermediate__parent,ent_fct_staging_dependent_on_marts_or_intermediate__child_model_type,ent_fct_staging_dependent_on_marts_or_intermediate__child
+
+      - name: dpe_staging_dependent_on_staging_group_by
+        title: Staging Models Dependent on Other Staging Models
+        description: |
+          fct_staging_dependent_on_staging (source) shows each parent/child relationship where models in the staging layer are dependent on each other.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/modeling/#staging-models-dependent-on-other-staging-models)
+        metric: met_dpe_staging_dependent_on_staging
+        type: table
+        group by: ent_fct_staging_dependent_on_staging__child_model_type,ent_fct_staging_dependent_on_staging__child,ent_fct_staging_dependent_on_staging__parent_model_type,ent_fct_staging_dependent_on_staging__parent
+
+      - name: dpe_unused_sources_group_by
+        title: Unused Sources
+        description: |
+          fct_unused_sources (source) shows each source with 0 children.
+          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/modeling/#unused-sources)
+        metric: met_dpe_unused_sources
+        type: table
+        group by: ent_fct_unused_sources__parent
