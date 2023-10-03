@@ -1,0 +1,21 @@
+ENT_DBT_INVOCATION__DBT_RUN_ID,ENT_DBT_INVOCATION__DBT_RUN_STEP_ID,ENT_DBT_INVOCATION__DBT_RUN_STEP_COMMAND,ENT_DBT_INVOCATION__DBT_CLOUD_RUN_URL,MET_DA_LAST_EXECUTION
+manual on 2023-10-03 04:52:37.733,#1,dbt run -s fct_dbt__invocations_ext,,2023-10-03 04:52:37.733041
+manual on 2023-10-03 04:45:41.428,#1,dbt run -s fct_dbt__invocations_ext,,2023-10-03 04:45:41.428621
+manual on 2023-10-03 04:45:06.855,#1,dbt run -s fct_dbt__invocations_ext,,2023-10-03 04:45:06.855409
+manual on 2023-10-03 04:35:54.434,#1,dbt run -s fct_dbt__invocations_ext,,2023-10-03 04:35:54.434350
+manual on 2023-10-03 04:33:35.518,#1,dbt run -s fct_dbt__invocations_ext,,2023-10-03 04:33:35.518625
+manual on 2023-10-03 04:33:00.767,#1,dbt run -s fct_dbt__invocations_ext,,2023-10-03 04:33:00.767775
+manual on 2023-10-03 04:29:33.765,#1,dbt run -s fct_dbt__invocations_ext,,2023-10-03 04:29:33.765334
+#200474806,#1,dbt --log-format json --debug build --target default --profile user --profiles-dir /tmp/jobs/200474806/.dbt,https://cloud.getdbt.com/deploy/11553/projects/290967/runs/200474806,2023-10-03 00:00:45.275543
+#200384122,#1,dbt --log-format json --debug build --target default --profile user --profiles-dir /tmp/jobs/200384122/.dbt,https://cloud.getdbt.com/deploy/11553/projects/290967/runs/200384122,2023-10-02 18:00:49.394485
+#200281176,#1,dbt --log-format json --debug build --target default --profile user --profiles-dir /tmp/jobs/200281176/.dbt,https://cloud.getdbt.com/deploy/11553/projects/290967/runs/200281176,2023-10-02 12:00:42.771935
+#200183768,#1,dbt --log-format json --debug build --target default --profile user --profiles-dir /tmp/jobs/200183768/.dbt,https://cloud.getdbt.com/deploy/11553/projects/290967/runs/200183768,2023-10-02 06:00:39.299666
+#200100237,#1,dbt --log-format json --debug build --target default --profile user --profiles-dir /tmp/jobs/200100237/.dbt,https://cloud.getdbt.com/deploy/11553/projects/290967/runs/200100237,2023-10-02 00:00:57.846961
+#200006943,#1,dbt --log-format json --debug build --target default --profile user --profiles-dir /tmp/jobs/200006943/.dbt,https://cloud.getdbt.com/deploy/11553/projects/290967/runs/200006943,2023-10-01 18:00:25.143864
+#199918762,#1,dbt --log-format json --debug build --target default --profile user --profiles-dir /tmp/jobs/199918762/.dbt,https://cloud.getdbt.com/deploy/11553/projects/290967/runs/199918762,2023-10-01 12:00:45.028504
+#199833489,#1,dbt --log-format json --debug build --target default --profile user --profiles-dir /tmp/jobs/199833489/.dbt,https://cloud.getdbt.com/deploy/11553/projects/290967/runs/199833489,2023-10-01 06:00:52.714163
+#199747567,#1,dbt --log-format json --debug build --target default --profile user --profiles-dir /tmp/jobs/199747567/.dbt,https://cloud.getdbt.com/deploy/11553/projects/290967/runs/199747567,2023-10-01 00:01:17.435433
+#199658911,#1,dbt --log-format json --debug build --target default --profile user --profiles-dir /tmp/jobs/199658911/.dbt,https://cloud.getdbt.com/deploy/11553/projects/290967/runs/199658911,2023-09-30 18:00:41.628191
+#199565291,#1,dbt --log-format json --debug build --target default --profile user --profiles-dir /tmp/jobs/199565291/.dbt,https://cloud.getdbt.com/deploy/11553/projects/290967/runs/199565291,2023-09-30 12:00:37.369255
+#199479307,#1,dbt --log-format json --debug build --target default --profile user --profiles-dir /tmp/jobs/199479307/.dbt,https://cloud.getdbt.com/deploy/11553/projects/290967/runs/199479307,2023-09-30 06:00:48.928304
+#199392337,#1,dbt --log-format json --debug build --target default --profile user --profiles-dir /tmp/jobs/199392337/.dbt,https://cloud.getdbt.com/deploy/11553/projects/290967/runs/199392337,2023-09-30 00:00:44.686795
