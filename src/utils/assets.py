@@ -53,7 +53,10 @@ class LineChartAsset(Asset):
 class TableAsset(Asset):
 
     def chart(self, data: pd.DataFrame):
-        streamlit.dataframe(data)
+        if self.spec.get("transposed", False):
+            streamlit.dataframe(data.transpose())
+        else:
+            streamlit.dataframe(data)
 
 
 class IndicatorAsset(Asset):
