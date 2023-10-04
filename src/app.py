@@ -1,7 +1,10 @@
 import os
 
 from utils.semantic import SemanticHelper
-from utils.assets import AssetStreamlitChartMap
+
+from collections import Counter
+
+from utils.assets import AssetStreamlitChartMap, IndicatorAsset, Asset
 from utils.cache import Cache
 from utils.utils import YamlParser, DashboardFinder
 
@@ -25,11 +28,21 @@ class App:
     def _load_cache(self):
         return Cache()
 
+
     def _load_semantic_api(self):
         url = os.environ.get("DBT_SEMANTIC_URL")
         if url:
             return SemanticHelper(url=url)
         return None
+
+    # Define a custom sorting key function
+    def custom_sort_key(self, asset: Asset) -> int:
+        # Assign a lower sort value (0) to IndicatorAsset objects and a higher value (1) to others
+        if isinstance(asset, IndicatorAsset):
+            return 0
+        else:
+            return 1
+
 
     def run(self):
         # Generate dashboard objects
@@ -120,11 +133,20 @@ class App:
             dashboard_spec = self.ctx[dashboard_idx]
             st.title(dashboard_spec.get("name"))  # dashboard name
             st.markdown(dashboard_spec.get("description"))  # dashboard description
-            for asset in assets:
-                st.header(asset.spec.get("title"))
-                st.markdown(asset.spec.get("description"))
-                asset.display()
-                st.divider()
+            st.write("#")
+            sorted_assets = sorted(assets, key=self.custom_sort_key)  # get line assets first
+            num_of_columns = Counter(isinstance(asset, IndicatorAsset) for asset in sorted_assets)[True]
+            cols = st.columns(num_of_columns)
+            for idc, asset in enumerate(sorted_assets):
+                if isinstance(asset, IndicatorAsset) and idc <= num_of_columns:
+                    with cols[idc]:
+                        asset.display()
+                else:
+                    st.divider()
+                    st.header(asset.spec.get("title"))  # un-indent to see indicators vertically as well
+                    st.markdown(asset.spec.get("description"))
+                    asset.display()
+                    st.divider()
 
         # About Page
         if selected == 'About':
