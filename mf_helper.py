@@ -21,13 +21,15 @@ class MfHelper:
 
         return dashboards_spec
 
-    def get_asset_info(self, dashboard_specs: dict):
+    def get_asset_info(self, dashboard_specs: dict) -> List[tuple]:
         asset_info = []
         # loops through each dashboard if multiple is defined within the same yaml
         for idx, dashboard in enumerate(dashboard_specs):
             for num_of_ass, asset in enumerate(dashboard.get("assets")):
                 asset_name = re.sub(r'[\s-]+', '_', asset.get("name").lower())  # changes str to snake-case
                 metric_name = asset.get("metric")
+                if not isinstance(metric_name, str):  # check for api call type assets and skip them
+                    break
                 group_by = asset.get("group by")
                 if asset_name and metric_name:
                     asset_info.append((asset_name, metric_name, group_by))
