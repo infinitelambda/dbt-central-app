@@ -67,6 +67,16 @@ class App:
                                    icons=['house', 'search', 'info-circle'],
                                    menu_icon='clipboard2-data', default_index=0)
 
+        def get_package_option_display(package_name):
+            find_package = [
+                dashboard.get("name")
+                for dashboard in self.ctx
+                if dashboard.get("package_name") == package_name
+            ]
+            if find_package:
+                return find_package[0]
+            return package_name
+
         if selected == "Home":
             # Header
             st.title('Welcome to DashboarDBT')
@@ -104,10 +114,16 @@ class App:
         if selected == "Dashboards":
             # Display sidebar
             packages = [dashboard.get("package_name") for dashboard in self.ctx]
-            sorted_packages = sorted(packages)
+
+            packages.sort()
             dash_sidebar = st.sidebar
             with dash_sidebar:
-                option = st.selectbox("Select a dbt package from the list below.", sorted_packages)
+                option = st.selectbox(
+                    "Select a dbt package from the list below.",
+                    options=packages,
+                    format_func=get_package_option_display,
+                )
+
                 st.write('')  # for vertical positioning
                 st.write('')
                 st.write('')
@@ -133,12 +149,14 @@ class App:
             dashboard_spec = self.ctx[dashboard_idx]
             st.title(dashboard_spec.get("name"))  # dashboard name
             st.markdown(dashboard_spec.get("description"))  # dashboard description
-            st.write("#")
+
             sorted_assets = sorted(assets, key=self.custom_sort_key)  # get line assets first
             num_of_columns = Counter(isinstance(asset, IndicatorAsset) for asset in sorted_assets)[True]
-            cols = st.columns(num_of_columns)
+            if num_of_columns > 0:
+                st.write("#")  # spacer for UI
+                cols = st.columns(num_of_columns)
             for idc, asset in enumerate(sorted_assets):
-                if isinstance(asset, IndicatorAsset) and idc <= num_of_columns:
+                if isinstance(asset, IndicatorAsset) and idc <= num_of_columns and num_of_columns > 0:
                     with cols[idc]:
                         asset.display()
                 else:
@@ -146,7 +164,7 @@ class App:
                     st.header(asset.spec.get("title"))  # un-indent to see indicators vertically as well
                     st.markdown(asset.spec.get("description"))
                     asset.display()
-                    st.divider()
+
 
         # About Page
         if selected == 'About':
