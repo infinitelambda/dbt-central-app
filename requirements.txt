@@ -2,4 +2,9 @@ streamlit
 pandas
 PyYAML
 streamlit_option_menu
+# for jbbc api
 adbc-driver-flightsql
+# for graphql api
+pyarrow
+pandas
+httpx[http2]

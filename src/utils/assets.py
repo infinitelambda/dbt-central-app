@@ -3,21 +3,24 @@ import re
 
 import pandas as pd
 import streamlit
+from utils.semantic import SemanticAPIFactory
 
 from utils.cache import CacheMiss
 
 
 class Asset(abc.ABC):
-    def __init__(self, cache, dashboard, spec, semantic_api = None):
-        self.semantic_api = semantic_api
+    def __init__(self, cache, dashboard, spec):
         self.cache = cache
         self.dashboard = dashboard
         self.spec = spec
+        self.semantic_api = None
 
     def fetch_metric_data(self) -> pd.DataFrame:
-        if self.semantic_api and isinstance(self.spec.get("metric"), dict): 
-            # temporarily support metric.query only 
+        if isinstance(self.spec.get("metric"), dict):
+            # Only create connection on Dashboard using API
+            self.semantic_api = SemanticAPIFactory().get_connection(metric=self.spec.get("metric"))
             return self.fetch_metric_data_by_api()
+        
         asset_name = re.sub(r'[\s-]+', '_', self.spec.get("name").lower())  # snake_case formatting
         return self.cache.fetch(package=self.dashboard.get("package_name"), asset_name=asset_name)
 

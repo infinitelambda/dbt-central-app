@@ -1,0 +1,28 @@
+dashboards:
+  - name: Dashboards for tesing Semantic API via JDBC
+    title: Dashboards for tesing Semantic API via JDBC
+    description: Using JDBC Connection (see [docs](https://docs.getdbt.com/docs/dbt-cloud-apis/sl-jdbc#examples))
+    package_name: test_semantic_api_jdbc
+    assets:
+      - name: Test Coverage
+        title: Data Coverage by Tests
+        description: |
+          Value from `dbt_project_evaluator`'s metric named `test_coverage`.
+
+          Query:
+          ```
+          select  * 
+          from    {{ semantic_layer.query(
+                    metrics=["dbt_project_evaluator_test_coverage"],
+                    group_by=['metric_time']
+                  ) }}
+          ```
+        type: table
+        metric:
+          type: jdbc
+          query: |
+            select * 
+            from {{ semantic_layer.query(
+              metrics=["dbt_project_evaluator_test_coverage"],
+              group_by=['metric_time']
+            ) }}

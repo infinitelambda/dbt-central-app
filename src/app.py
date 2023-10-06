@@ -1,7 +1,5 @@
 import os
 
-from utils.semantic import SemanticHelper
-
 from collections import Counter
 
 from utils.assets import AssetStreamlitChartMap, IndicatorAsset, Asset
@@ -16,7 +14,6 @@ class App:
     def __init__(self):
         self.ctx = self._load_context()
         self.cache = self._load_cache()
-        self.semantic_api = self._load_semantic_api()
 
     def _load_context(self):
         finder = DashboardFinder()
@@ -27,13 +24,6 @@ class App:
 
     def _load_cache(self):
         return Cache()
-
-
-    def _load_semantic_api(self):
-        url = os.environ.get("DBT_SEMANTIC_URL")
-        if url:
-            return SemanticHelper(url=url)
-        return None
 
     # Define a custom sorting key function
     def custom_sort_key(self, asset: Asset) -> int:
@@ -54,7 +44,7 @@ class App:
             pages[package_name] = (idx, assets)
             for asset_spec in dashboard_spec.get("assets"):
                 asset = AssetStreamlitChartMap.chart.get(asset_spec.get("type"))
-                assets.append(asset(self.cache, dashboard_spec, asset_spec, self.semantic_api))
+                assets.append(asset(self.cache, dashboard_spec, asset_spec))
 
         # Layout
         st.set_page_config(
