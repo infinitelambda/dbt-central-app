@@ -1,0 +1,22 @@
+dashboards:
+  - name: Dashboards for tesing Semantic API via GraphQL
+    title: Dashboards for tesing Semantic API via GraphQL
+    description: Using GraphQL Connection (see [docs](https://docs.getdbt.com/docs/dbt-cloud-apis/sl-graphql#using-the-graphql-api))
+    package_name: test_semantic_api_graphql
+    assets:
+      - name: Test Coverage
+        title: Data Coverage by Tests
+        description: |
+          Value from `dbt_project_evaluator`'s metric named `test_coverage`.
+
+          Query:
+          ```
+          metrics: [{name: "dbt_project_evaluator_test_coverage"}]
+          groupBy: [{name: "metric_time", grain: DAY}]
+          ```
+        type: table
+        metric:
+          type: graphql
+          query: |
+            metrics: [{name: "dbt_project_evaluator_test_coverage"}]
+            groupBy: [{name: "metric_time", grain: DAY}]
