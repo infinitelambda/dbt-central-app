@@ -14,13 +14,13 @@ dashboards:
         sort_by: METRIC_TIME__MONTH
         ascending: True
         x: METRIC_TIME__MONTH
-        y: met_da_order_count
+        y: MET_DA_ORDER_COUNT
 
       - name: Orders Details
         title: TCPH Orders Details
         description: Order count detailed.
         metric: met_da_order_count,met_da_order_count_cum
-        group by: metric_time
+        group by: METRIC_TIME__DAY
         type: table
         sort_by: METRIC_TIME__DAY
         ascending: True
