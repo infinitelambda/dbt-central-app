@@ -78,7 +78,7 @@ dashboards:
         # mf query --metrics met_smc_full_table_name --where "{{TimeDimension('ent_query_base_table_access__query_start_time','DAY')}} >= dateadd('day', -30, current_date)" --group-by ent_query_base_table_access__full_table_name --order -met_smc_full_table_name --limit 100
 
       - name: Top 10 tables not queried in the last month
-        title: Which queries are not used in the last 30 days?
+        title: Which tables are not queried in the last 30 days?
         description: List of tables not queried in the last 30 days in the whole Snowflake environment
         metric: met_smc_non_queried_tables_30d
         type: table
@@ -101,14 +101,6 @@ dashboards:
         order: met_smc_daily_spend
         # mf query --metrics met_smc_daily_spend --group-by ent_service --order -met_smc_daily_spend --limit 5
 
-      - name: Credit Map
-        title: Credit mapping with the Warehouse Size
-        description: Mapping between the number of credit cost vs the warehouse size
-        metric: met_smc_warehouse_credits_map
-        group by: ent_warehouse_credits_map__warehouse_size
-        type: table
-        # mf query --metrics met_smc_warehouse_credits_map --group-by ent_warehouse_credits_map__warehouse_size
-      
       - name: Attributes for invocate_id
         title: What is the usage produce by the different invocates running on Snowflake?
         description: Table providing information about all of the invocates running on Snowflake. It shows what cost they have produced each time they run, what is their execution time in seconds and how many queries each of them is consistant of.
