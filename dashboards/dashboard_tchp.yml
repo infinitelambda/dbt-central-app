@@ -8,17 +8,20 @@ dashboards:
     assets:
       - name: Orders
         title: TCPH Orders
-        metric: tpch_count_orders
+        metric: met_da_order_count
+        group by: METRIC_TIME__MONTH
         type: line_chart
         sort_by: METRIC_TIME__MONTH
         ascending: True
         x: METRIC_TIME__MONTH
-        y: TPCH_COUNT_ORDERS
+        y: met_da_order_count
 
       - name: Orders Details
         title: TCPH Orders Details
         description: Order count detailed.
-        metric: tpch_count_orders
+        metric: met_da_order_count,met_da_order_count_cum
+        group by: metric_time
         type: table
-        sort_by: TPCH_COUNT_ORDERS
+        sort_by: METRIC_TIME__DAY
         ascending: True
+        # mf query --metrics met_da_order_count,met_da_order_count_cum --group-by metric_time --order metric_time --limit 10
