@@ -13,6 +13,7 @@ dashboards:
         title: 🐌 Top 5 Slowest Models
         description: Average timing taken by each model
         metric: met_da_model_timing
+        group by: ent_model_excution__name
         type: table
         sort_by: MET_DA_MODEL_TIMING
         ascending: False
@@ -21,11 +22,20 @@ dashboards:
       - name: Test Timing
         title: 🐌 Top 5 Costed Test Cases
         description: Average timing taken by each test case
-        metric: met_da_test_timing # not specified yet
+        metric: met_da_test_timing
+        group by: ent_test_execution__node_id
         type: table
         sort_by: MET_DA_TEST_TIMING
         ascending: False
-        # mf query --metrics met_da_test_timing --group-by ent_model_excution__name  --order -met_da_model_timing --limit 5
+        # mf query --metrics met_da_test_timing --group-by ent_test_execution__node_id  --order -met_da_test_timing --limit 5
+
+      - name: Latest Test Stats
+        title: Latest Test Execution Stats
+        description: Total test pass/fail/warn/skipped for latest test execution
+        metric: met_da_test_total
+        group by: metric_time__day,ent_test_execution__command_invocation_id,ent_test_execution__status
+        type: table
+        # mf query --metrics met_da_test_total --group-by metric_time__day,ent_test_execution__command_invocation_id,ent_test_execution__status
 
       - name: Last Executions
         title: 👀 Last Executions
@@ -41,5 +51,6 @@ dashboards:
         description: Number of dbt invocation
         metric: met_da_invocation_count
         type: table
+        group by: metric_time
         sort_by: METRIC_TIME__DAY
         # mf query --metrics met_da_invocation_count --group-by metric_time
