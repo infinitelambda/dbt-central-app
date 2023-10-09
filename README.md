@@ -21,13 +21,13 @@ cd dbt-dashboards-strimlit
 Run the following command to create a virtual environment. Replace <venv_name> with the name you want to give to your virtual environment (e.g., "myenv").
 
 ```commandline
-python -m venv <venv_name>
+python3 -m venv <venv_name>
 ```
 
 Example:
 
 ```commandline  
-python -m venv .venv
+python3 -m venv .venv
 ```
 
 This command will create a new directory with the specified name (e.g., ".venv") in your project folder.
@@ -76,15 +76,6 @@ dashboards:
         ...
         metric:
           query: select * from {{ semantic_layer.query(metrics=["dbt_project_evaluator_test_coverage"]) }}
-```
-
-## Use the POC for transpose table
-
-Follow the previously described setup steps then:  
-From the root directory **dbt-dashboards-strimlit/** run
-
-```commandline
-streamlit run transpose_df.py
 ```
 
 ## Use **_mf_helper.py_**

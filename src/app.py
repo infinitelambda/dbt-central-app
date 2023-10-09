@@ -4,7 +4,7 @@ from collections import Counter
 
 from utils.assets import AssetStreamlitChartMap, IndicatorAsset, Asset
 from utils.cache import Cache
-from utils.utils import YamlParser, DashboardFinder
+from utils.utils import YamlParser, DashboardFinder, ValidateUserYaml, InvalidYamlSpecification
 
 import streamlit as st
 from streamlit_option_menu import option_menu
@@ -14,6 +14,7 @@ class App:
     def __init__(self):
         self.ctx = self._load_context()
         self.cache = self._load_cache()
+        self.validator = ValidateUserYaml()
 
     def _load_context(self):
         finder = DashboardFinder()
@@ -33,18 +34,7 @@ class App:
         else:
             return 1
 
-
     def run(self):
-        # Generate dashboard objects
-        pages = dict()
-        # loops through each parsed file found in directory
-        for idx, dashboard_spec in enumerate(self.ctx):
-            package_name = dashboard_spec.get("package_name")
-            assets = list()
-            pages[package_name] = (idx, assets)
-            for asset_spec in dashboard_spec.get("assets"):
-                asset = AssetStreamlitChartMap.chart.get(asset_spec.get("type"))
-                assets.append(asset(self.cache, dashboard_spec, asset_spec))
 
         # Layout
         st.set_page_config(
@@ -53,8 +43,9 @@ class App:
             initial_sidebar_state="expanded")
 
         with st.sidebar:
-            selected = option_menu('DashboarDBT', ["Home", 'Dashboards', 'About'],
-                                   icons=['house', 'search', 'info-circle'],
+            selected = option_menu('DashboarDBT',
+                                   ["Home", 'Dashboards', 'Configuration', 'Change log', 'Documentation'],
+                                   icons=['house', 'search', 'gear', 'clock-history', 'file-text'],
                                    menu_icon='clipboard2-data', default_index=0)
 
         def get_package_option_display(package_name):
@@ -102,6 +93,17 @@ class App:
 
         # Dashboards menu
         if selected == "Dashboards":
+            # Generate dashboard objects
+            pages = dict()
+            # loops through each parsed file found in directory
+            for idx, dashboard_spec in enumerate(self.ctx):
+                package_name = dashboard_spec.get("package_name")
+                assets = list()
+                pages[package_name] = (idx, assets)
+                for asset_spec in dashboard_spec.get("assets"):
+                    asset = AssetStreamlitChartMap.chart.get(asset_spec.get("type"))
+                    assets.append(asset(self.cache, dashboard_spec, asset_spec))
+
             # Display sidebar
             packages = [dashboard.get("package_name") for dashboard in self.ctx]
 
@@ -114,29 +116,14 @@ class App:
                     format_func=get_package_option_display,
                 )
 
-                st.write('')  # for vertical positioning
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                col1, col2, col3 = st.columns([2.2, 1.5, 1.5])
-                with col1:
-                    st.image('./images/IL_Logo_white.png', width=95)
-                with col2:
-                    st.image('./images/dbt-png.png', width=40)
-                with col3:
-                    st.image('./images/snowflake.png', width=40)
-
             # Display dashboard selected by the sidebar
             dashboard_idx, assets = pages.get(option)
             dashboard_spec = self.ctx[dashboard_idx]
+            try:
+                self.validator.validate_dashboard(dashboard_spec)
+            except InvalidYamlSpecification as e:
+                st.error(f"Dashboard is missing one of the expected attributes: {e}\n", icon="⚠️")
+
             st.title(dashboard_spec.get("name"))  # dashboard name
             st.markdown(dashboard_spec.get("description"))  # dashboard description
 
@@ -155,44 +142,41 @@ class App:
                     st.markdown(asset.spec.get("description"))
                     asset.display()
 
+        # Configuration Page
+        if selected == 'Configuration':
+            st.title("Configuration")
+            st.write("DB username:", st.secrets["db_username"])
+            st.write("DB password:", st.secrets["db_password"])
 
-        # About Page
-        if selected == 'About':
-            dash_sidebar = st.sidebar
-            with dash_sidebar:
-                st.write('')  # for vertical positioning
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                col1, col2, col3 = st.columns([2.2, 1.5, 1.5])
-                with col1:
-                    st.image('./images/IL_Logo_white.png', width=95)
-                with col2:
-                    st.image('./images/dbt-png.png', width=40)
-                with col3:
-                    st.image('./images/snowflake.png', width=40)
+            st.write(os.environ["DBT_SEMANTIC_UR"])
+            st.write(os.environ["db_username"])
 
-            st.title('Presenter')
-            with st.container():
-                col1, col2 = st.columns(2)
-                col1.write('')
-                col1.write('')
-                col1.write('')
-                col1.write('**Name:**    Adrien Boutreau')
-                col1.write('**Education:**    Very cool')
-                col1.write('**Experience:**    Realllly much')
-                col1.write(
-                    '**Contact:**    adrien@infinitelambda.com or [linkedin](https://fr.linkedin.com/in/adrien-boutreau)')
-                col1.write('**Thanks for stopping by!**')
-                col2.image('./images/adrien.jpeg')
+        if selected == 'Change log':
+            st.title("Change log")
+            file_path = "../CHANGELOG.md"
+            try:
+                with open(file_path, "r", encoding="utf-8") as file:
+                    readme_contents = file.read()
+
+                    st.markdown(readme_contents)
+            except FileNotFoundError:
+                print(f"The file '{file_path}' was not found.")
+            except Exception as e:
+                print(f"An error occurred: {e}")
+
+        if selected == 'Documentation':
+            st.title("Documentation")
+            file_path = "../README.md"
+            try:
+                with open(file_path, "r", encoding="utf-8") as file:
+
+                    readme_contents = file.read()
+
+                    st.markdown(readme_contents)
+            except FileNotFoundError:
+                print(f"The file '{file_path}' was not found.")
+            except Exception as e:
+                print(f"An error occurred: {e}")
 
 
 if __name__ == '__main__':
