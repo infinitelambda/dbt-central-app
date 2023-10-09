@@ -6,6 +6,7 @@ import streamlit
 from utils.semantic import SemanticAPIFactory
 
 from utils.cache import CacheMiss
+from utils.utils import InvalidYamlSpecification, ValidateUserYaml
 
 
 class Asset(abc.ABC):
@@ -14,6 +15,7 @@ class Asset(abc.ABC):
         self.dashboard = dashboard
         self.spec = spec
         self.semantic_api = None
+        self.validator = ValidateUserYaml()
 
     def fetch_metric_data(self) -> pd.DataFrame:
         if isinstance(self.spec.get("metric"), dict):
@@ -32,6 +34,11 @@ class Asset(abc.ABC):
         return data.sort_values(by=[self.spec.get("sort_by")], ascending=self.spec.get("ascending"))
 
     def display(self):
+        try:
+            #self._check_attributes()
+            self.validator.validate_asset(self.spec)
+        except InvalidYamlSpecification as e:
+            streamlit.error(f"Asset is missing one of the expected attributes: {e}\n", icon="⚠️")
         try:
             data = self.fetch_metric_data()
             if self.spec.get("ascending"):

@@ -3,6 +3,10 @@ import yaml
 from typing import List, Union
 
 
+class InvalidYamlSpecification(BaseException):
+    pass
+
+
 class DashboardFinder:
     """
     A class for finding the 'dashboards' directory recursively.
@@ -82,3 +86,15 @@ class YamlParser:
         return self._parse_yaml_files()
 
 
+class ValidateUserYaml:
+    EXPECTED_DASHBOARD_ATTRIBUTES = ["name", "title", "package_name", "assets"]
+    EXPECTED_ASSET_ATTRIBUTES = ["name", "title", "metric", "type"]
+
+    def validate_dashboard(self, parsed_dashboard: dict):
+        if not all(attr in parsed_dashboard for attr in self.EXPECTED_DASHBOARD_ATTRIBUTES):
+            raise InvalidYamlSpecification(self.EXPECTED_DASHBOARD_ATTRIBUTES)
+
+    def validate_asset(self, parsed_asset: dict):
+
+        if not all(attr in parsed_asset for attr in self.EXPECTED_ASSET_ATTRIBUTES):
+            raise InvalidYamlSpecification(f"{self.EXPECTED_ASSET_ATTRIBUTES} utils")
