@@ -1,6 +1,14 @@
-ENT_DAILY_SPEND__SERVICE,MET_SMC_DAILY_SPEND
-Storage,265596
-Cloud Services,5090
-Compute,4868
-Serverless Tasks,1255
-Replication,1254
+ENT_SERVICE,MET_SMC_DAILY_SPEND
+Adj For Incl Cloud Services,-180.35813373123003
+Query Acceleration,0.0
+Snowpipe Streaming,0.0
+Search Optimization,0.0
+Serverless Tasks,0.0031037526
+Materialized Views,0.0087308013
+Data Transfer,0.020525000064
+Snowpipe,0.22514072100000002
+Automatic Clustering,0.8395644288
+Replication,7.6592058816
+Storage,165.28100180193715
+Cloud Services,254.8782439437
+Compute,7194.3440815818
