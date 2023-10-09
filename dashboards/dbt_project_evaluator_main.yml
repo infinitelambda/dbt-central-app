@@ -2,18 +2,50 @@ dashboards:
   - name: dbt project evaluator -  Main KPIs
     title: Dashboard for dbt project evaluator [Github repository](https://github.com/dbt-labs/dbt-project-evaluator/)
     description: |
-      Dashboards for dbt project evaluator develop & maintain by [Infinite Lambda](https://infinitelambda.com/dbt-premier-consulting-partner/) :first_place_medal:.
+      Dashboards for dbt project evaluator developed and maintained by [Infinite Lambda](https://infinitelambda.com/dbt-premier-consulting-partner/) :first_place_medal:.
 
       👉 [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/)
     package_name: dbt_project_evaluator_main
     assets:
       - name: dpe_test_coverage_over_time
-        title: Test % coverage
+        title: 🔍 Test % coverage
         description: For more details information see [tests detail](http://localhost:8501/#test-coverage)
         metric: met_dpe_test_coverage
         type: indicator
+
       - name: dpe_documentation_coverage
-        title: Documentation % coverage
-        description: For more details information see [tests detail](http://localhost:8501/#documentation-coverage)
+        title: 📚 Documentation % coverage
+        description: For more details information see [undocumented models detail](http://localhost:8501/#undocumented-models)
         metric: met_dpe_documentation_coverage
         type: indicator
+
+      
+      - name: dpe_direct_join_to_source
+        title: ❎ Direct Join to Source
+        description: For more details information see [chained views dependencies detail](http://localhost:8501/#chained-view-dependencies)
+        metric: met_dpe_direct_join_to_source
+        type: indicator
+        # mf query --metrics met_dpe_direct_join_to_source --csv ../dbt-dashboards-strimlit/.cache/dbt_project_evaluator_main/dpe_direct_join_to_source.csv
+
+      - name: dpe_model_fanout
+        title: 🔖 Models Fanout
+        description: For more details information see [chained views dependencies detail](http://localhost:8501/#chained-view-dependencies)
+        metric: met_dpe_model_fanout
+        type: indicator
+        # mf query --metrics met_dpe_model_fanout --csv ../dbt-dashboards-strimlit/.cache/dbt_project_evaluator_main/dpe_model_fanout.csv
+
+      - name: dpe_model_naming_conventions
+        title: ✏️ Inappropriate naming
+        description: For more details information see [naming conventions detail](http://localhost:8501/#model-naming-conventions)
+        metric: met_dpe_model_naming_conventions
+        type: indicator
+        # mf query --metrics met_dpe_model_naming_conventions --csv ../dbt-dashboards-strimlit/.cache/dbt_project_evaluator_main/dpe_model_naming_conventions.csv
+
+      - name: dpe_chained_views_dependencies
+        title: 🔗 Chained View Deps
+        description: For more details information see [chained views dependencies detail](http://localhost:8501/#chained-view-dependencies)
+        metric: met_dpe_chained_views_dependencies
+        type: indicator
+        # mf query --metrics met_dpe_chained_views_dependencies --csv ../dbt-dashboards-strimlit/.cache/dbt_project_evaluator_main/dpe_chained_views_dependencies.csv
+
+      
