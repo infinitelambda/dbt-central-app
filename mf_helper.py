@@ -31,8 +31,11 @@ class MfHelper:
                 if not isinstance(metric_name, str):  # check for api call type assets and skip them
                     break
                 group_by = asset.get("group by")
+                limit_rows = asset.get("limit")
+                order_by = asset.get("order")
+                where_clause = asset.get("where")
                 if asset_name and metric_name:
-                    asset_info.append((asset_name, metric_name, group_by))
+                    asset_info.append((asset_name, metric_name, group_by, limit_rows, order_by, where_clause))
         return asset_info
 
     def create_cache_directory(self, package_name: Union[str, None] = None) -> Tuple[bool, str]:
@@ -50,12 +53,21 @@ class MfHelper:
         else:
             return True, f"{desired_path} already exists."
 
-    def download_cache_files(self, package_name: str, asset_name: str, metric_name: str, group_by: Union[str, None]) -> Tuple[bool, str]:
+    def download_cache_files(self, package_name: str, asset_name: str, metric_name: str, group_by: Union[str, None], limit_rows: Union[str, None], order_by: Union[str, None], where_clause: Union[str, None]) -> Tuple[bool, str]:
         cache_file_path = os.path.join(os.path.join(self.cache_directory_path, package_name), f"{asset_name}.csv")
         command = ["mf", "query", "--metrics", metric_name]
 
         if group_by is not None:
             command.extend(["--group-by", group_by])
+
+        if limit_rows is not None:
+            command.extend(["--limit", limit_rows])
+
+        if order_by is not None:
+            command.extend(["--order", order_by])
+
+        if where_clause is not None:
+            command.extend(["--where", where_clause])
 
         command.extend(["--csv", cache_file_path])
 
@@ -70,8 +82,8 @@ class MfHelper:
 
     def generate_multiple_cache_files(self, package_name: str, asset_info: List[tuple]):
         results = []
-        for asset_name, metric_name, group_by in asset_info:
-            success, message = self.download_cache_files(package_name, asset_name, metric_name, group_by)
+        for asset_name, metric_name, group_by, limit_rows, order_by, where_clause in asset_info:
+            success, message = self.download_cache_files(package_name, asset_name, metric_name, group_by, limit_rows, order_by, where_clause)
             results.append((success, message))
         return results
 

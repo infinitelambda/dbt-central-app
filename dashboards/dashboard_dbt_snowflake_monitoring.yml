@@ -8,35 +8,129 @@ dashboards:
     package_name: dbt_snowflake_monitoring
     assets:
       - name: This Month Cost
-        title: This Month Cost
+        title: Total credit cost 💰 for current month so far
         description: Total 💰 credit cost on this month so far
         metric: met_smc_daily_spend
         type: indicator
+        where: "{{TimeDimension('ent_daily_pk__date','MONTH')}} = last_day(current_date() - interval '1 month') + interval '1 day'"
         # mf query --metrics met_smc_daily_spend --where "{{Dimension('ent_daily_spend__date__day')}} = '2023-09-01'" ? NOT WORKING
 
-      - name: Monthly Cost
-        title: Monthly Cost
-        description: Total 💰 cost on Monthly Basis
+      - name: Remaining balance 
+        title: Remaining free balance for the current month so far
+        description: Remaining free balance for the current month
+        metric: met_smc_free_usage_balance
+        where: "{{TimeDimension('ent_remaining_balance_daily_without_contract_view_pk__date','DAY')}} = current_date()"
+        type: indicator
+        # mf query --metrics met_smc_free_usage_balance --where "{{TimeDimension('ent_remaining_balance_daily_without_contract_view_pk__date','DAY')}} = current_date()" --limit 1
+      
+      - name: Count of queries for current month
+        title: Number of queries executed for the current month
+        description: Number of queries executed for the current month
+        metric: met_smc_count_query_ids
+        where: "{{TimeDimension('ent_dbt_queries_pk__execution_start_time','MONTH')}} = last_day(current_date() - interval '1 month') + interval '1 day'"
+        type: indicator
+        # mf query --metrics met_smc_execution_time_s --order -met_smc_execution_time_s --limit 1
+
+      - name: 1y Back Cost Usage
+        title: How much cost 💸 was produces each month for the past year?
+        description: Total credit cost 💸 produced for each month for the past one year
         metric: met_smc_daily_spend
+        type: table
+        group by: ent_daily_pk__date__month
+        limit: '12'
+        where: "{{TimeDimension('ent_daily_pk__date','MONTH')}} < last_day(current_date() - interval '1 month') + interval '1 day'"
+        order: -ent_daily_pk__date__month
+        # mf query --metrics met_smc_daily_spend --group-by ent_daily_pk__date__month --order -ent_daily_pk__date__month --limit 3
+
+      - name: Spends by Warehouse
+        title: Which warehouse produces most of the montly cost?
+        description: Total 💰 credit cost spends for the curent month split by warehouse
+        metric: met_smc_daily_spend
+        type: table
+        group by: ent_daily_pk__warehouse_name,ent_daily_pk__date__month
+        order: -met_smc_daily_spend
+        where: "{{Entity('ent_service')}} in ('Compute', 'Cloud Services') AND {{TimeDimension('ent_daily_pk__date','MONTH')}} = last_day(current_date() - interval '1 month') + interval '1 day'"
+        # mf query --metrics met_smc_daily_spend --group-by ent_daily_pk__warehouse_name,ent_daily_pk__date__month --order -met_smc_daily_spend --where "{{Entity('ent_service')}} in ('Compute', 'Cloud Services') AND {{TimeDimension('ent_daily_pk__date','MONTH')}} = last_day(current_date() - interval '1 month') + interval '1 day'"
+
+      - name: Monthly Cost
+        title: Montly usage costs
+        description: Which month the cost for usage was bigger that the rest? 
+        metric: met_smc_daily_spend,met_smc_daily_rates
+        group by: metric_time__month 
+        order: metric_time__month
         type: line_chart
         sort_by: METRIC_TIME__MONTH
         ascending: True
         x: METRIC_TIME__MONTH
         y:
           - MET_SMC_DAILY_SPEND
-          - MET_SMC_DAILY_RATES
         # mf query --metrics met_smc_daily_spend,met_smc_daily_rates --group-by metric_time__month --order metric_time__month
 
-      - name: Cost by Service
-        title: Top 5 - Cost by Service
-        description: Total 💰 cost by Service
-        metric: met_cost_per_query
+      - name: Top 10 tables queried in the last month
+        title: Top 10 Tables queried in the last month
+        description: Most used (therefore queried) tables in the Snowflake environment
+        metric: met_smc_full_table_name
         type: table
-        # mf query --metrics met_smc_daily_spend --group-by ent_daily_spend__service --order -met_smc_daily_spend --limit 5
+        group by: ent_query_base_table_access__full_table_name
+        order: -met_smc_full_table_name
+        where: "{{TimeDimension('ent_query_base_table_access__query_start_time','DAY')}} >= dateadd('day', -30, current_date)"
+        limit: '10'
+        # mf query --metrics met_smc_full_table_name --where "{{TimeDimension('ent_query_base_table_access__query_start_time','DAY')}} >= dateadd('day', -30, current_date)" --group-by ent_query_base_table_access__full_table_name --order -met_smc_full_table_name --limit 100
+
+      - name: Top 10 tables not queried in the last month
+        title: Which queries are not used in the last 30 days?
+        description: List of tables not queried in the last 30 days in the whole Snowflake environment
+        metric: met_smc_non_queried_tables_30d
+        type: table
+        group by: ent_query_base_table_access__full_table_name
+        order: met_smc_non_queried_tables_30d
+        limit: '10'
+        # mf query --metrics met_smc_non_queried_tables_30d --order met_smc_non_queried_tables_30d --limit 10 --group-by ent_query_base_table_access__full_table_name
+
+      - name: Cost by Service
+        title: How are the usage costs produced, split by service?
+        description: Total 💰 cost by Service
+        metric: met_smc_daily_spend
+        type: line_chart
+        sort_by: ENT_SERVICE
+        ascending: True
+        x: ENT_SERVICE
+        y:
+          - MET_SMC_DAILY_SPEND
+        group by: ent_service
+        order: met_smc_daily_spend
+        # mf query --metrics met_smc_daily_spend --group-by ent_service --order -met_smc_daily_spend --limit 5
 
       - name: Credit Map
         title: Credit mapping with the Warehouse Size
         description: Mapping between the number of credit cost vs the warehouse size
         metric: met_smc_warehouse_credits_map
+        group by: ent_warehouse_credits_map__warehouse_size
         type: table
         # mf query --metrics met_smc_warehouse_credits_map --group-by ent_warehouse_credits_map__warehouse_size
+      
+      - name: Attributes for invocate_id
+        title: What is the usage produce by the different invocates running on Snowflake?
+        description: Table providing information about all of the invocates running on Snowflake. It shows what cost they have produced each time they run, what is their execution time in seconds and how many queries each of them is consistant of.
+        metric: met_smc_query_cost,met_smc_execution_time_s,met_smc_count_query_ids
+        group by: ent_invocation_id 
+        order: -met_smc_query_cost,-met_smc_execution_time_s,-met_smc_count_query_ids
+        where: "ent_invocation_id is not null"
+        type: table
+        # mf query --metrics met_smc_query_cost,met_smc_execution_time_s,met_smc_count_query_ids --group-by ent_invocation_id --order -met_smc_query_cost,-met_smc_execution_time_s,-met_smc_count_query_ids --where "ent_invocation_id is not null"
+
+      - name: Monthly cost split by compute, cloud services and query
+        title: Monthly cost split by compute, cloud services and query 
+        description: Total Montly cost split up by the amount of resources used - query execution, compute time and cloud services
+        metric: met_smc_compute_cost,met_smc_cloud_services_cost,met_smc_cost_per_query
+        group by: ent_cost_per_query_pk__execution_start_time__month 
+        order: ent_cost_per_query_pk__execution_start_time__month
+        type: line_chart
+        sort_by: ENT_COST_PER_QUERY_PK__EXECUTION_START_TIME__MONTH
+        ascending: True
+        x: ENT_COST_PER_QUERY_PK__EXECUTION_START_TIME__MONTH
+        y:
+          - MET_SMC_COMPUTE_COST
+          - MET_SMC_CLOUD_SERVICES_COST
+          - MET_SMC_COST_PER_QUERY
+        # mf query --metrics met_smc_compute_cost,met_smc_cloud_services_cost,met_smc_cost_per_query --group-by ent_cost_per_query_pk__execution_start_time__month --order ent_cost_per_query_pk__execution_start_time__month
