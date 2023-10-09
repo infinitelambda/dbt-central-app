@@ -2,15 +2,15 @@ dashboards:
   - name: dbt project evaluator - Structure & Performance
     title: Dashboard for dbt project evaluator [Github repository](https://github.com/dbt-labs/dbt-project-evaluator/)
     description: |
-      Dashboards for dbt project evaluator develop & maintain by [Infinite Lambda](https://infinitelambda.com/dbt-premier-consulting-partner/) :first_place_medal:.
+      Dashboards for dbt project evaluator developed and maintained by [Infinite Lambda](https://infinitelambda.com/dbt-premier-consulting-partner/) :first_place_medal:.
       👉 [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/)
     package_name: dbt_project_evaluator_struct_perf
     assets:
       - name: dpe_model_naming_conventions_group_by
         title: Model Naming Conventions
         description: |
-          fct_model_naming_conventions (source) shows all cases where a model does NOT have the appropriate prefix.
-          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/structure/#model-naming-conventions)
+          `fct_model_naming_conventions` [(source)](https://github.com/dbt-labs/dbt-project-evaluator/blob/main/models/marts/structure/fct_model_naming_conventions.sql) shows all cases where a model does NOT have the appropriate prefix.
+          👉 Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/structure/#model-naming-conventions)
         metric: met_dpe_model_naming_conventions
         type: table
         group by: ent_fct_model_naming_conventions__model_type,ent_fct_model_naming_conventions__resource_name,ent_fct_model_naming_conventions__prefix,ent_fct_model_naming_conventions__appropriate_prefixes
@@ -18,10 +18,10 @@ dashboards:
       - name: dpe_model_directories_group_by
         title: Model Directories
         description: |
-          fct_model_directories (source) shows all cases where a model is NOT in the appropriate subdirectory:
+          `fct_model_directories` [(source)](https://github.com/dbt-labs/dbt-project-evaluator/blob/main/models/marts/structure/fct_model_directories.sql) shows all cases where a model is NOT in the appropriate subdirectory:
           - For staging models: The files should be nested in the staging folder of a subfolder that matches their source parent's name.
           - For non-staging models: The files should be nested closest to the folder name that matches their model type.
-          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/structure/#model-directories)
+          👉 Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/structure/#model-directories)
         metric: met_dpe_model_directories
         type: table
         group by: ent_fct_model_directories__change_file_path_to,ent_fct_model_directories__resource_type,ent_fct_model_directories__resource_name,ent_fct_model_directories__model_type
@@ -29,8 +29,8 @@ dashboards:
       - name: dpe_source_directories_group_by
         title: Source Directories
         description: |
-          fct_source_directories (source) shows all cases where a source definition is NOT in the appropriate subdirectory
-          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/structure/#source-directories)
+          `fct_source_directories` [(source)](https://github.com/dbt-labs/dbt-project-evaluator/blob/main/models/marts/structure/fct_source_directories.sql) shows all cases where a source definition is NOT in the appropriate subdirectory
+          👉 Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/structure/#source-directories)
         metric: met_dpe_source_directories
         type: table
         group by: ent_fct_source_directories__resource_type,ent_fct_source_directories__resource_name,ent_fct_source_directories__change_file_path_to
@@ -38,8 +38,8 @@ dashboards:
       - name: dpe_test_directories_group_by
         title: Test Directories
         description: |
-          fct_test_directories (source) shows all cases where model tests are NOT in the same subdirectory as the corresponding model.
-          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/structure/#test-directories)
+          `fct_test_directories` [(source)](https://github.com/dbt-labs/dbt-project-evaluator/blob/main/models/marts/structure/fct_test_directories.sql) shows all cases where model tests are NOT in the same subdirectory as the corresponding model.
+          👉 Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/structure/#test-directories)
         metric: met_dpe_test_directories
         type: table
         group by: ent_fct_test_directories__test_name,ent_fct_test_directories__model_name,ent_fct_test_directories__change_test_directory_to
@@ -47,8 +47,8 @@ dashboards:
       - name: dpe_chained_views_dependencies_group_by
         title: Chained View Dependencies
         description: |
-          fct_chained_views_dependencies (source) contains models that are dependent on chains of "non-physically-materialized" models (views and ephemerals), highlighting potential cases for improving performance by switching the materialization of model(s) within the chain to table or incremental.
-          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/performance/#chained-view-dependencies)
+          `fct_chained_views_dependencies` [(source)](https://github.com/dbt-labs/dbt-project-evaluator/blob/main/models/marts/performance/fct_chained_views_dependencies.sql) contains models that are dependent on chains of "non-physically-materialized" models (views and ephemerals), highlighting potential cases for improving performance by switching the materialization of model(s) within the chain to table or incremental.
+          👉 Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/performance/#chained-view-dependencies)
         metric: met_dpe_chained_views_dependencies
         type: table
         group by: ent_fct_chained_views_dependencies__path,ent_fct_chained_views_dependencies__parent,ent_fct_chained_views_dependencies__distance,ent_fct_chained_views_dependencies__child
@@ -56,10 +56,10 @@ dashboards:
       - name: dpe_exposure_parents_materializations_group_by
         title: Exposure Parents Materializations
         description: |
-          fct_exposure_parents_materializations (source) highlights instances where the resources referenced by exposures are either:
-          - a source
-          - a model that does not use the table or incremental materialization
-          Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/performance/#exposure-parents-materializations)
+          `fct_exposure_parents_materializations` [(source)](https://github.com/dbt-labs/dbt-project-evaluator/blob/main/models/marts/performance/fct_exposure_parents_materializations.sql) highlights instances where the resources referenced by exposures are either:
+          - a `source`
+          - a `model` that does not use the `table` or `incremental` materialization
+          👉 Docs [dbt project evaluator docs](https://dbt-labs.github.io/dbt-project-evaluator/0.8/rules/performance/#exposure-parents-materializations)
         metric: met_dpe_exposure_parents_materializations
         type: table
         group by: ent_fct_exposure_parents_materializations__exposure_name,ent_fct_exposure_parents_materializations__parent_model_materialization,ent_fct_exposure_parents_materializations__parent_resource_name,ent_fct_exposure_parents_materializations__parent_resource_type
