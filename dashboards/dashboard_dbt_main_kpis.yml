@@ -1,0 +1,86 @@
+dashboards:
+  - name: Dashboard DBT -  Main KPIs
+    title: Dashboard for monitoring dbt
+    description: |
+      Dashboards for monitoring dbt project performance developed and maintained by [Infinite Lambda](https://infinitelambda.com/dbt-premier-consulting-partner/) :first_place_medal:.
+
+    package_name: dbt_main_kpis
+    assets:
+      - name: da_last_execution
+        title: 👀 Last Executions
+        description: Last Executions Time
+        metric: met_da_last_execution
+        type: indicator
+        # mf query --metrics met_da_last_execution --csv ../dbt-dashboards-strimlit/.cache/dbt_main_kpis/da_last_execution.csv
+
+      - name: da_model_timing
+        title: 🏃 Average Model Runtime (s)
+        description: Average timing taken by each model
+        metric: met_da_model_timing
+        type: indicator
+        # mf query --metrics met_da_model_timing --csv ../dbt-dashboards-strimlit/.cache/dbt_main_kpis/da_model_timing.csv
+
+      - name: dpe_test_coverage_over_time
+        title: 🔍 Test % coverage
+        description: For more details information see [tests detail](http://localhost:8501/#test-coverage)
+        metric: met_dpe_test_coverage
+        type: indicator
+
+      - name: dpe_documentation_coverage
+        title: 📚 Documentation % coverage
+        description: For more details information see [undocumented models detail](http://localhost:8501/#undocumented-models)
+        metric: met_dpe_documentation_coverage
+        type: indicator
+
+      - name: This Month Cost
+        title: 💸 Current Month Snowflake Cost
+        description: Total 💰 credit cost on this month so far
+        metric: met_smc_daily_spend
+        type: indicator
+      
+      - name: Data Quality Score
+        title: Data Quality Score
+        description: Average value of `records_passed / records_scanned`
+        metric: data_quality_score
+        type: indicator
+        # mf query --metrics data_quality_score
+      
+      - name: Test Coverage
+        title: Data Coverage by Tests
+        description: Average value of `data_scanned / all_data`
+        metric: test_coverage
+        type: indicator
+        # mf query --metrics test_coverage
+      
+      - name: Data Quality Score - Accuracy
+        title: ✅ Accuracy
+        description: Average value of `records_passed / records_scanned` where the KPI is `Accuracy`
+        metric: data_quality_score
+        type: indicator
+        # mf query --metrics data_quality_score --where "{{Dimension('key__dq_dimension')}} = 'Accuracy'"
+
+      - name: Orders
+        title: TCPH Orders
+        description: Monthly orders
+        metric: met_da_order_count
+        group by: METRIC_TIME__MONTH
+        type: line_chart
+        sort_by: METRIC_TIME__MONTH
+        ascending: True
+        x: METRIC_TIME__MONTH
+        y: MET_DA_ORDER_COUNT
+      
+      - name: Monthly Cost
+        title: 💸 Monthly Snowflake Cost
+        description: Total Snowflake cost on monthly basis 💰
+        metric: met_smc_daily_spend
+        type: line_chart
+        sort_by: METRIC_TIME__MONTH
+        ascending: True
+        x: METRIC_TIME__MONTH
+        y:
+          - MET_SMC_DAILY_SPEND
+          - MET_SMC_DAILY_RATES
+      
+      
+      
