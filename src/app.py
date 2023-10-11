@@ -129,10 +129,10 @@ class App:
             num_of_columns = Counter(isinstance(asset, IndicatorAsset) for asset in sorted_assets)[True]
             if num_of_columns > 0:
                 st.write("#")  # spacer for UI
-                cols = st.columns(num_of_columns)
+                cols = st.columns(4)
             for idc, asset in enumerate(sorted_assets):
                 if isinstance(asset, IndicatorAsset) and idc <= num_of_columns and num_of_columns > 0:
-                    with cols[idc]:
+                    with cols[idc%4]:
                         asset.display()
                 else:
                     st.divider()
