@@ -6,6 +6,55 @@ dashboards:
     description: Dashboards for the TCPH project
     package_name: dbt-tpch
     assets:
+      - name: Total Revenue
+        title: This Year Total Revenue(M)
+        description: Most Recent Year Total Revenue
+        metric: met_da_total_revenue
+        where: "{{Dimension('ent_order_item__is_max_year_date')}} = True"
+        type: indicator
+        # mf query --metrics met_da_total_revenue --where "{{Dimension('ent_order_item__is_max_year_date')}} = True"
+
+      - name: Gross Profit
+        title: This Year Gross Profit(M)
+        description: Most recent year Gross Profit
+        metric: met_da_gross_profit
+        where: "{{Dimension('ent_order_item__is_max_year_date')}} = True"
+        type: indicator
+        # mf query --metrics met_da_gross_profit --where "{{Dimension('ent_order_item__is_max_year_date')}} = True"
+
+      - name: Gross Profit Margin
+        title: Gross Profit Margin(%)
+        description: Most recent year Gross Profit Margin
+        metric: met_da_gross_profit_margin
+        where: "{{Dimension('ent_order_item__is_max_year_date')}} = True"
+        type: indicator
+        # mf query --metrics met_da_gross_profit_margin --where "{{Dimension('ent_order_item__is_max_year_date')}} = True"
+
+      - name: Total Revenue by Category
+        title: Revenue(M) & Profit Margin by Product Category
+        description: Revenue & Profit Margin split by Product Category from 1 to 7
+        metric: met_da_total_revenue,met_da_gross_profit_margin
+        where: "{{Dimension('ent_order_item__is_max_year_date')}} = True"
+        group by: ent_order_item__line_number
+        type: line_chart
+        sort_by: met_da_total_revenue
+        ascending: False
+        x: ENT_ORDER_ITEM__LINE_NUMBER
+        y: 
+          - MET_DA_TOTAL_REVENUE
+          - MET_DA_GROSS_PROFIT_MARGIN
+        # mf query --metrics met_da_total_revenue,met_da_gross_profit_margin --group-by ent_order_item__line_number --where "{{Dimension('ent_order_item__is_max_year_date')}} = True" --order -ent_order_item__line_number
+
+      - name: Revenue Growth YOY
+        title: Revenue Growth YOY (%)
+        description: Percentage growth of Revenue to 1 year ago
+        metric: met_da_total_revenue_growth_yoy
+        group by: metric_time__year
+        type: table
+        sort_by: metric_time__year
+        Ascending: False
+        # mf query --metrics met_da_total_revenue_growth_yoy --group-by metric_time__year --order -metric_time__year
+
       - name: Orders
         title: TCPH Orders
         metric: met_da_order_count
@@ -25,3 +74,24 @@ dashboards:
         sort_by: METRIC_TIME__DAY
         ascending: True
         # mf query --metrics met_da_order_count,met_da_order_count_cum --group-by metric_time --order metric_time --limit 10
+
+      - name: Ontime Shipping Rate
+        title: Ontime Shipping Rate (%)
+        description: Pecentage of total order shipping ontime to client
+        metric: met_da_ontime_shipping_rate
+        type: indicator
+        # mf query --metrics met_da_ontime_shipping_rate
+
+      - name: Order Fulfilment Cycle
+        title: Order Fulfilment Cycle in day
+        description: Average Order fulfilment cycle
+        metric: met_order_fulfilment_cycle
+        type: indicator
+        # mf query --metrics met_order_fulfilment_cycle
+
+      - name: Order Internal Cycle
+        title: Order Internal Cycle in day
+        description: Average Order internal cycle
+        metric: met_order_internal_cycle
+        type: indicator
+        # mf query --metrics met_order_internal_cycle
