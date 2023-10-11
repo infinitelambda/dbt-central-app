@@ -145,11 +145,17 @@ class App:
         # Configuration Page
         if selected == 'Configuration':
             st.title("Configuration")
-            st.write("DB username:", st.secrets["db_username"])
-            st.write("DB password:", st.secrets["db_password"])
 
-            st.write(os.environ["DBT_SEMANTIC_UR"])
-            st.write(os.environ["db_username"])
+            st.text_input(
+                label='dbt Cloud API Key 🔑',
+                type="password",
+                placeholder="Enter your dbt cloud api key here")
+
+            st.text_input(
+                label="dbt Cloud Job ID  🔖",
+                placeholder="Enter dbt Cloud Job ID here")
+                
+            st.button("Save", type = "primary")
 
         if selected == 'Change log':
             st.title("Change log")
