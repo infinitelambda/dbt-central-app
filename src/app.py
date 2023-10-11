@@ -38,12 +38,12 @@ class App:
 
         # Layout
         st.set_page_config(
-            page_title="DasboarDBT",
+            page_title="dashboardbt",
             layout="wide",
             initial_sidebar_state="expanded")
 
         with st.sidebar:
-            selected = option_menu('DashboarDBT',
+            selected = option_menu('dashboardbt',
                                    ["Home", 'Dashboards', 'Configuration', 'Change log', 'Documentation'],
                                    icons=['house', 'search', 'gear', 'clock-history', 'file-text'],
                                    menu_icon='clipboard2-data', default_index=0)
@@ -60,7 +60,7 @@ class App:
 
         if selected == "Home":
             # Header
-            st.title('Welcome to DashboarDBT')
+            st.title('Welcome to dashboardbt')
             st.subheader('*A central place for all your dbt related metrics.*')
 
             st.divider()
@@ -73,23 +73,21 @@ class App:
                     st.markdown(
                         """
                         - _Interested in dashboards which contains information about KPIs?_
-                        - _In need of help to monitor Snowflake performance and costs?_
+                        - _Monitor your dbt jobs & Snowflake costs_
                         - _Evaluating the visualisation of test results?_
-                        - _Just here to play and learn?_
+                        """
+                    )
+                    st.header('Your links')
+                    st.markdown(
+                        """
+                        - [dbt cloud jobs](https://cloud.getdbt.com/deploy/11553/projects/290967/jobs)
+                        - [dbt cloud docs](https://cloud.getdbt.com/accounts/11553/jobs/419022/docs/#!/overview)
+                        - [Snowflake admin](https://app.snowflake.com/gezjpyc/infinitelambda/#/account/usage)
+                        - [Link to repository](https://github.com/infinitelambda/central-app-dbt)
                         """
                     )
                 with col2:
                     pass
-
-            st.divider()
-            with st.container():
-                col1, col2, col3 = st.columns([2.2, 1.4, 1.6])
-                with col1:
-                    st.image('./images/IL_Logo_white.png', width=180)
-                with col2:
-                    st.image('./images/dbt-png.png', width=83)
-                with col3:
-                    st.image('./images/Snowflake_Logo.svg.png', width=320)
 
         # Dashboards menu
         if selected == "Dashboards":
@@ -154,7 +152,7 @@ class App:
             st.text_input(
                 label="dbt Cloud Job ID  🔖",
                 placeholder="Enter dbt Cloud Job ID here")
-                
+
             st.button("Save", type = "primary")
 
         if selected == 'Change log':
