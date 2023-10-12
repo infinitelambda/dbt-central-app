@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - develop
-      - feature/ci-pipeline
   pull_request:
     branches:
       - develop
@@ -29,8 +28,7 @@ jobs:
         pip install -r requirements.txt
     - name: Lint code
       run: |  
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-#        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        flake8 src test --count --select=E9,F63,F7,F82 --show-source --statistics
     - name: Execute unit tests
       run: pytest test
     - name: Execute code coverage
