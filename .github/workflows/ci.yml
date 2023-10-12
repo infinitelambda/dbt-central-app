@@ -25,16 +25,13 @@ jobs:
         sparse-checkout: |
           .github
           src
-        # add the tests folder if its needed or the whole project (then change the fetching action)
     - name: Lint code
       run: |
         pip install flake8
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-# if pytest is not included in the req file
     - name: Install Pytest
       run: pip install pytest
-# -------------------------------------------
     - name: Execute unit tests
       run: pytest tests
     - name: Execute code coverage
