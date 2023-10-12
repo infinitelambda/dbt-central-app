@@ -37,3 +37,5 @@ jobs:
       run: pytest tests
     - name: Execute code coverage
       run: pytest --cov=src --cov-fail-under=80
+    - name: Echo finish
+      run: echo finish
