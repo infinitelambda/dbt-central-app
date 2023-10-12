@@ -25,6 +25,7 @@ jobs:
         sparse-checkout: |
           .github
           src
+          test
     - name: Lint code
       run: |
         pip install flake8
