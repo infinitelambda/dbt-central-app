@@ -10,32 +10,27 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup Python 3.11
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip 
-          pip install -r requirements.txt
-      - uses: actions/checkout@v4
-      - name: Fetch codebase
-        with:
-          sparse-checkout: |
-            .github
-            src
-            test
-      - name: Lint code
-        run: |
-          pip install flake8
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      - name: Install Pytest
-        run: pip install pytest
-      - name: Execute unit tests
-        run: pytest tests
-      - name: Execute code coverage
-        run: pytest --cov=src --cov-fail-under=80
-      - name: Echo finish
-        run: echo finish
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        pip install -r requirements.txt
+    - uses: actions/checkout@v4
+    - name: Fetch codebase
+      with:
+        sparse-checkout: |
+          .github
+          src
+          test
+    - name: Lint code
+      run: |
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Execute unit tests
+      run: pytest test
+    - name: Execute code coverage
+      run: pytest --cov=src --cov-fail-under=80
