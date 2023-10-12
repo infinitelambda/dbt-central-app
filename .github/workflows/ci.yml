@@ -2,7 +2,7 @@ name: DBT Dashboards App
 on:
   push:
     branches:
-      - develop
+      - [ develop, feature/ci-pipeline ]
   pull_request:
     branches:
       - develop
