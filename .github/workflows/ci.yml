@@ -10,15 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-python@v3
-      with:
-        python-version: '3.11'
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8 pytest
-        pip install -r requirements.txt
     - uses: actions/checkout@v4
     - name: Fetch codebase
       with:
@@ -26,6 +17,15 @@ jobs:
           .github
           src
           test
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest
+        pip install -r requirements.txt
     - name: Lint code
       run: |
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
