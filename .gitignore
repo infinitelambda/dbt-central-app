@@ -24,3 +24,6 @@ venv.bak/
 
 # PyCharm
 .idea/
+
+# Data Loader Log
+.cache/data_loader.log
