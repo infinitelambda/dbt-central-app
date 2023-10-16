@@ -5,9 +5,17 @@ from collections import Counter
 from utils.assets import AssetStreamlitChartMap, IndicatorAsset, Asset
 from utils.cache import Cache
 from utils.utils import YamlParser, DashboardFinder, ValidateUserYaml, InvalidYamlSpecification
+from utils.data_loader import DataLoader
 
 import streamlit as st
 from streamlit_option_menu import option_menu
+
+HOME = "Home"
+DATA_LOADER = "Data Loader"
+DASHBOARDS = "Dashboards"
+CONFIGURATION = "Configuration"
+CHANGE_LOG = "Change log"
+DOCUMENTATION = "Documentation"
 
 
 class App:
@@ -23,6 +31,11 @@ class App:
         context = parser.get_raw_data()
         return context
 
+    def _load_data(self, dbt_path):
+        loader = DataLoader()
+        loader.load(dbt_path=dbt_path)
+        self.loaded_cache = True
+
     def _load_cache(self):
         return Cache()
 
@@ -35,18 +48,33 @@ class App:
             return 1
 
     def run(self):
-
         # Layout
         st.set_page_config(
-            page_title="dashboardbt",
-            layout="wide",
-            initial_sidebar_state="expanded")
+            page_title="dashboardbt", layout="wide", initial_sidebar_state="expanded"
+        )
 
         with st.sidebar:
-            selected = option_menu('dashboardbt',
-                                   ["Home", 'Dashboards', 'Configuration', 'Change log', 'Documentation'],
-                                   icons=['house', 'search', 'gear', 'clock-history', 'file-text'],
-                                   menu_icon='clipboard2-data', default_index=0)
+            selected = option_menu(
+                "dashboardbt",
+                [
+                    HOME,
+                    DATA_LOADER,
+                    DASHBOARDS,
+                    CONFIGURATION,
+                    CHANGE_LOG,
+                    DOCUMENTATION,
+                ],
+                icons=[
+                    "house",
+                    "cloud-download",
+                    "search",
+                    "gear",
+                    "clock-history",
+                    "file-text",
+                ],
+                menu_icon="clipboard2-data",
+                default_index=0,
+            )
 
         def get_package_option_display(package_name):
             find_package = [
@@ -58,10 +86,13 @@ class App:
                 return find_package[0]
             return package_name
 
-        if selected == "Home":
+        if selected == HOME:
             # Header
-            st.title('Welcome to dashboardbt')
-            st.subheader('*A central place for all your dbt related metrics.*')
+            st.title("Welcome to dashboardbt")
+            st.subheader("*A central place for all your dbt related metrics.*")
+            st.markdown(
+                "Developed by [Infinite Lambda](https://infinitelambda.com/dbt-premier-consulting-partner/) :first_place_medal:"
+            )
 
             st.divider()
 
@@ -69,7 +100,7 @@ class App:
             with st.container():
                 col1, col2 = st.columns(2)
                 with col1:
-                    st.header('Use Cases')
+                    st.header("Use Cases")
                     st.markdown(
                         """
                         - _Interested in dashboards which contains information about KPIs?_
@@ -77,7 +108,7 @@ class App:
                         - _Evaluating the visualisation of test results?_
                         """
                     )
-                    st.header('Your links')
+                    st.header("Your links")
                     st.markdown(
                         """
                         - [dbt cloud jobs](https://cloud.getdbt.com/deploy/11553/projects/290967/jobs)
@@ -90,7 +121,7 @@ class App:
                     pass
 
         # Dashboards menu
-        if selected == "Dashboards":
+        if selected == DASHBOARDS:
             # Generate dashboard objects
             pages = dict()
             # loops through each parsed file found in directory
@@ -120,42 +151,111 @@ class App:
             try:
                 self.validator.validate_dashboard(dashboard_spec)
             except InvalidYamlSpecification as e:
-                st.error(f"Dashboard is missing one of the expected attributes: {e}\n", icon="⚠️")
+                st.error(
+                    f"Dashboard is missing one of the expected attributes: {e}\n", icon="⚠️"
+                )
 
             st.title(dashboard_spec.get("name"))  # dashboard name
             st.markdown(dashboard_spec.get("description"))  # dashboard description
 
             sorted_assets = sorted(assets, key=self.custom_sort_key)  # get line assets first
-            num_of_columns = Counter(isinstance(asset, IndicatorAsset) for asset in sorted_assets)[True]
+            num_of_columns = Counter(
+                isinstance(asset, IndicatorAsset) for asset in sorted_assets
+            )[True]
             if num_of_columns > 0:
                 st.write("#")  # spacer for UI
                 cols = st.columns(4)
             for idc, asset in enumerate(sorted_assets):
-                if isinstance(asset, IndicatorAsset) and idc <= num_of_columns and num_of_columns > 0:
-                    with cols[idc%4]:
+                if (
+                    isinstance(asset, IndicatorAsset)
+                    and idc <= num_of_columns
+                    and num_of_columns > 0
+                ):
+                    with cols[idc % 4]:
                         asset.display()
                 else:
                     st.divider()
-                    st.header(asset.spec.get("title"))  # un-indent to see indicators vertically as well
+                    st.header(
+                        asset.spec.get("title")
+                    )  # un-indent to see indicators vertically as well
                     st.markdown(asset.spec.get("description"))
                     asset.display()
 
+        # Data Loader Menu
+        if selected == DATA_LOADER:
+            st.title("Data Loader")
+
+            with st.container():
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.header("Loading Cache Data")
+                    st.header("Your links")
+                    st.markdown(
+                        """
+                        This page will allow you to generate or regenerate the cache data.
+
+                        Please ensure that before you continue - you have confirmed your dbt project is set up correctly and note the root directory of said project.
+
+                        After you input the _full_ path - click the `Load` and await the completion of the load
+                        """
+                    )
+                with col2:
+                    pass
+
+                directory = st.text_input(
+                    label="dbt Project Directory 📂",
+                    type="default",
+                    placeholder="Enter your dbt project dir here",
+                )
+
+                def disable_load_button(b):
+                    st.session_state["disabled"] = b
+
+                if st.button(
+                    "Load",
+                    key="load_button",
+                    type="primary",
+                    on_click=disable_load_button,
+                    disabled=st.session_state.get("disabled", False),
+                    args=(True,),
+                ):
+                    # Validate that directory exists
+                    if not os.path.isdir(directory):
+                        st.text(
+                            "Directory {directory} does not exist".format(directory=directory)
+                        )
+                        return
+                    # Validate that dbt_project.yml exists
+                    if not os.path.exists(f"{directory.rstrip('/')}/dbt_project.yml"):
+                        st.text(
+                            "Directory {directory} does not contain dbt_project.yml".format(
+                                directory=f"{directory.rstrip('/')}/dbt_project.yml"
+                            )
+                        )
+                        return
+
+                    # Ensure we use full path for .cache
+                    # Run each load from the specified directory
+                    # Show log output
+                    self._load_data(dbt_path=directory)
+
         # Configuration Page
-        if selected == 'Configuration':
+        if selected == CONFIGURATION:
             st.title("Configuration")
 
             st.text_input(
-                label='dbt Cloud API Key 🔑',
+                label="dbt Cloud API Key 🔑",
                 type="password",
-                placeholder="Enter your dbt cloud api key here")
+                placeholder="Enter your dbt cloud api key here",
+            )
 
             st.text_input(
-                label="dbt Cloud Job ID  🔖",
-                placeholder="Enter dbt Cloud Job ID here")
+                label="dbt Cloud Job ID  🔖", placeholder="Enter dbt Cloud Job ID here"
+            )
 
-            st.button("Save", type = "primary")
+            st.button("Save", type="primary")
 
-        if selected == 'Change log':
+        if selected == CHANGE_LOG:
             st.title("Change log")
             file_path = "../CHANGELOG.md"
             try:
@@ -168,12 +268,11 @@ class App:
             except Exception as e:
                 print(f"An error occurred: {e}")
 
-        if selected == 'Documentation':
+        if selected == DOCUMENTATION:
             st.title("Documentation")
             file_path = "../README.md"
             try:
                 with open(file_path, "r", encoding="utf-8") as file:
-
                     readme_contents = file.read()
 
                     st.markdown(readme_contents)
@@ -183,5 +282,5 @@ class App:
                 print(f"An error occurred: {e}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     App().run()
