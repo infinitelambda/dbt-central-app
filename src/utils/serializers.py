@@ -29,7 +29,7 @@ class AssetSerializer(object):
         if self.is_valid():
             self.group_by = asset_dict.get("group by")
             self.limit_rows = asset_dict.get("limit")
-            self.order_by = asset_dict.get("order")
+            self.order_by = self.compute_order(asset_dict=asset_dict)
             self.where_clause = asset_dict.get("where")
 
     def is_valid(self) -> bool:
@@ -46,6 +46,34 @@ class AssetSerializer(object):
             valid = True
 
         return valid
+
+    def compute_order(self, asset_dict: dict) -> str:
+        """
+        Function used to factor in two different ordering mechanisms - sort_by and order
+            Parameters:
+                asset_dict (dict): Asset dictionary to be serialized
+
+            Returns:
+                ordering (str): String to use in order statement
+        """
+        descending_prefix = "-"
+        ordering = asset_dict.get("order", None)
+
+        # Let's try to get the "sort_by" value in case ordering is missing
+        if ordering == None:
+            ordering = asset_dict.get("sort_by", None)
+
+            # Account for multiple values
+            if ordering:
+                ordering = ordering.split(",")
+
+                # Accound to descending if passed
+                if not asset_dict.get("ascending", True):
+                    ordering = [descending_prefix + order for order in ordering]
+
+                ordering = ",".join(ordering)
+
+        return ordering
 
     def to_snakecase(self, to_snake_case: str) -> str:
         """
