@@ -78,25 +78,9 @@ dashboards:
           query: select * from {{ semantic_layer.query(metrics=["dbt_project_evaluator_test_coverage"]) }}
 ```
 
-## Use **_mf_helper.py_**
+## Load Data
 
-### To automatically generate all the cache files _(.csv)_ please use this script as follows
-
-Follow the previously described setup steps then:  
-Navigate to your dbt_project directory where the profiles.yml is located.
-
-Please make sure that in _```mf_helper.py```_:
-
-- ```dashboard_path_to_load``` is pointing to the desired YAML file
-- ```self.root_directory``` is pointing to the desired location
-
-Make sure that you use **username** and **password** in the _profiles.yml_. **It's critical for metricflow to run seamlessly**
-
-Run the script from you using:
-
-```commandline
-python path/to/mf_helper.py
-```
+### To automatically generate all the cache files _(.csv)_ please use the Data Loader menu from the sidebar
 
 ## Note
 
