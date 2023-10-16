@@ -116,7 +116,7 @@ class DataLoader:
 
         try:
             with open(self.log_path, "a") as file:
-                file.write(f"Command to be executed: {','.join(command)}\n")
+                file.write(f"Command to be executed: {' '.join(command)}\n")
 
             result = subprocess.run(command, capture_output=True, check=True, cwd=dbt_path)
 

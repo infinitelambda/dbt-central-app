@@ -232,11 +232,7 @@ class App:
                                 directory=f"{directory.rstrip('/')}/dbt_project.yml"
                             )
                         )
-                        return
 
-                    # Ensure we use full path for .cache
-                    # Run each load from the specified directory
-                    # Show log output
                     self._load_data(dbt_path=directory)
 
         # Configuration Page
