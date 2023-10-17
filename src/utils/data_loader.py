@@ -74,8 +74,9 @@ class DataLoader:
         """
         cache_path = self.cache_directory_path
 
-        # Create log file & clear
-        open(self.log_path, "w").close()
+        if package_name is None:
+            # Create log file & clear
+            open(self.log_path, "w").close()
 
         if package_name:
             package_subdirectory = os.path.join(self.cache_directory_path, package_name)
