@@ -22,7 +22,7 @@ class Asset(abc.ABC):
             # Only create connection on Dashboard using API
             self.semantic_api = SemanticAPIFactory().get_connection(metric=self.spec.get("metric"))
             return self.fetch_metric_data_by_api()
-        
+
         asset_name = re.sub(r'[\s-]+', '_', self.spec.get("name").lower())  # snake_case formatting
         return self.cache.fetch(package=self.dashboard.get("package_name"), asset_name=asset_name)
 
@@ -74,9 +74,48 @@ class IndicatorAsset(Asset):
         streamlit.metric(label=str(self.spec.get("title")), value=data.iloc[0, 0], label_visibility="visible")
 
 
+class EvaluatorReportAsset(Asset):
+    def chart(self, data: pd.DataFrame):
+        agg = data.groupby([
+                data.columns[0], # rule category
+                data.columns[1], # rule name
+                data.columns[2]  # rule doc
+            ])[
+                data.columns[4]  # rule status: pass(0) and fail(1)
+            ].agg([
+                ("# FAILED", lambda x: (x > 0).sum()),
+                ("# TOTAL", "count")
+            ]).reset_index()
+
+        agg = agg.sort_values(
+            by=[
+                agg.columns[3], # failed count desc
+                agg.columns[0], # rule category asc
+                agg.columns[1]  # rule name asc
+            ],
+            ascending=[False, True, True]
+        )
+
+        for _, row in agg.iterrows():
+            title = ("🟢 " if row.iloc[3] == 0 else "🔴 ")\
+                + row.iloc[0].upper() + " / " + row.iloc[1] \
+                + f" ({row.iloc[3]}/{row.iloc[4]})"
+                
+            with streamlit.expander(title):
+                rule_data = data[
+                    (data[data.columns[0]] == row.iloc[0])
+                    & (data[data.columns[1]] == row.iloc[1])
+                ].copy()
+                rule_data.drop(data.columns[2], axis=1, inplace=True)
+
+                streamlit.markdown(row.iloc[2])
+                streamlit.dataframe(rule_data, hide_index=True)
+
+
 class AssetStreamlitChartMap:
     chart = {
         "line_chart": LineChartAsset,
         "table": TableAsset,
-        "indicator": IndicatorAsset
+        "indicator": IndicatorAsset,
+        "evaluator_report": EvaluatorReportAsset
     }

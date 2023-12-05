@@ -1,0 +1,13 @@
+version: 2
+
+dashboards:
+  - name: Snowflake Evaluation
+    title: Dashboards for the Snowflake Evaluation
+    description: Dashboards for the Snowflake Evaluation
+    package_name: snowflake-evaluator
+    assets:
+      - name: Last Evaluation
+        title: Last Evaluation
+        description: Last Evaluation
+        metric: rule_category,rule,description,status
+        type: evaluator_report

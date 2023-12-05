@@ -1,0 +1,11 @@
+RULE_CATEGORY,RULE,RULE_DOC,CHECK_DESCRIPTION,STATUS
+Object,rule_object_1,[See the doc for the rule reference](https://diqu.iflambda.com/latest/nav/guide/config/sources/snowflake.html),rule_object_1_description_1,1
+Object,rule_object_1,[See the doc for the rule reference](https://diqu.iflambda.com/latest/nav/guide/config/sources/snowflake.html),rule_object_1_description_2,1
+Object,rule_object_2,rule_2_doc_markdown,rule_object_2_description,0
+Paramater,rule_object_3,rule_3_doc_markdown,rule_object_3_description_1,1
+Paramater,rule_object_3,rule_3_doc_markdown,rule_object_3_description_2,0
+Paramater,rule_object_4,rule_4_doc_markdown,rule_object_4_description,0
+User,rule_object_5,rule_5_doc_markdown,rule_object_5_description,0
+User,rule_object_6,rule_6_doc_markdown,rule_object_6_description,1
+User,rule_object_7,xxx,rule_object_7_description,0
+User,rule_object_8,xxx,rule_object_8_description,0
