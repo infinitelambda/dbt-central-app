@@ -74,9 +74,28 @@ class IndicatorAsset(Asset):
         streamlit.metric(label=str(self.spec.get("title")), value=data.iloc[0, 0], label_visibility="visible")
 
 
+class DynamicAsset(Asset):
+    def chart(self, data: pd.DataFrame):
+        func = getattr(streamlit, self.spec.get("dynamic_type"))
+        spec = self.spec.get("dynamic_spec", {})
+        spec_w_data = {}
+        for key in spec.keys():
+            expressions = spec[key].split(":")
+            if expressions[0] == "eval":
+                exp = str(expressions[-1])
+                exp = exp\
+                    .replace("@this", "self.spec")\
+                    .replace("@data", "data")
+                spec_w_data[key] = eval(exp)
+            else:
+                spec_w_data[key] = spec[key]
+        func(**spec_w_data)
+
+
 class AssetStreamlitChartMap:
     chart = {
         "line_chart": LineChartAsset,
         "table": TableAsset,
-        "indicator": IndicatorAsset
+        "indicator": IndicatorAsset,
+        "dynamic": DynamicAsset
     }

@@ -1,0 +1,63 @@
+version: 2
+
+# @this: stands for the asset's specification. To access to attributes, uses `@this.get('attr')`
+# @data: stands for the metric data
+
+dashboards:
+  - name: Dashboards with Dynamic Assets
+    title: Dashboards with Dynamic Assets
+    description: Dashboards with Dynamic Assets
+    package_name: dbt-tpch-dynamic
+    assets:
+      - name: Total Revenue
+        title: This Year Total Revenue(M)
+        description: Most Recent Year Total Revenue
+        metric: met_da_total_revenue
+        where: "{{Dimension('ent_order_item__is_max_year_date')}} = True"
+        type: dynamic
+        dynamic_type: metric # st.metric
+        dynamic_spec:
+          label: eval:@this.get("title")
+          value: eval:@data.iloc[0, 0]
+          delta: eval:@data.iloc[0, 0] / 2 # fake only
+          label_visibility: visible
+
+      - name: Revenue Growth YOY
+        title: Revenue Growth YOY (%)
+        description: Percentage growth of Revenue to 1 year ago
+        metric: met_da_total_revenue_growth_yoy
+        group by: metric_time__year
+        sort_by: metric_time__year
+        ascending: False
+        type: dynamic
+        dynamic_type: dataframe # st.dataframe
+        dynamic_spec:
+          data: eval:@data
+
+      - name: Orders
+        title: TCPH Orders
+        metric: met_da_order_count
+        group by: METRIC_TIME__MONTH
+        sort_by: METRIC_TIME__MONTH
+        ascending: True
+        type: dynamic
+        dynamic_type: line_chart # st.line_chart
+        dynamic_spec:
+          data: eval:@data
+          x: METRIC_TIME__MONTH
+          y: MET_DA_ORDER_COUNT
+          color: "#ffaa00"
+
+      - name: Orders
+        title: TCPH Orders (columned)
+        metric: met_da_order_count
+        group by: METRIC_TIME__MONTH
+        sort_by: METRIC_TIME__MONTH
+        ascending: True
+        type: dynamic
+        dynamic_type: bar_chart # st.bar_chart
+        dynamic_spec:
+          data: eval:@data
+          x: METRIC_TIME__MONTH
+          y: MET_DA_ORDER_COUNT
+          color: "#ff4b4b"
