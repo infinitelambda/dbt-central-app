@@ -88,8 +88,9 @@ class EvaluatorReportAsset(Asset):
         return " / ".join([str(row[x]) for x in cols])
     
     def chart(self, data: pd.DataFrame):
-        evaluation_spec = self.spec.get("evaluator_spec",{})
-        assert evaluation_spec != {}, "evaluator_spec is not specified"
+        # get spec
+        evaluation_spec = self.spec.get("evaluator_report_spec",{})
+        assert evaluation_spec != {}, "evaluator_report_spec is not specified"
         
         group_by_cols = evaluation_spec.get("group_by", data.columns.tolist())
         sort_by_cols = evaluation_spec.get("sort_by", list(group_by_cols))
@@ -98,11 +99,12 @@ class EvaluatorReportAsset(Asset):
             
         row_identifier_by_col = evaluation_spec.get("row_identifier_by")
         assert evaluation_spec != {}, "row_identifier_by is not specified"
-        row_status_col = evaluation_spec.get("row_status", "STATUS")
-        assert evaluation_spec != {}, "row_status is not specified"
+        row_status_col = evaluation_spec.get("row_status_by", "STATUS")
+        assert evaluation_spec != {}, "row_status_by is not specified"
         row_title_by_cols = evaluation_spec.get("row_title_by", list(group_by_cols))
         row_doc_by_col = evaluation_spec.get("row_doc_by", "DOC")
         
+        # agg data
         data = data.fillna({row_identifier_by_col: ""})
         group_by_cols.insert(0, pd.Categorical(data[metric_col]))
         agg = data.groupby(group_by_cols, observed=True).sum().reset_index()
@@ -110,7 +112,8 @@ class EvaluatorReportAsset(Asset):
             by=sort_by_cols,
             ascending=sort_accendings
         )
-
+        
+        # display as list of expanders
         for _, row in agg.iterrows():
             light = self.get_traffic_light(status=row[row_status_col] if row_status_col in agg else "")
             title = self.get_title(row=row, cols=row_title_by_cols)

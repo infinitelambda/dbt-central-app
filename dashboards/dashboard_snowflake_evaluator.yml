@@ -17,11 +17,11 @@ dashboards:
         description: Last Evaluation
         metric: CNT
         type: evaluator_report
-        evaluator_spec:
-          # group_by: [RULE_CATEGORY,RULE,RULE_DOC,IDENTIFIER,STATUS] # optional, default to get all columns
+        evaluator_report_spec:
+          # group_by: [RULE_CATEGORY,RULE,RULE_DOC,IDENTIFIER,STATUS] # optional, default to get all columns, and sum(metric)
           sort_by: [CNT, RULE_CATEGORY, RULE] # optional, default to get group_by's columns
           sort_ascending: [False, True, True] # optional, default to all True
-          row_status: STATUS # mandatory (try to find `STATUS` column if not specified), help to define the traffic lights
+          row_status_by: STATUS # mandatory (try to find `STATUS` column if not specified), help to define the traffic lights
           row_identifier_by: IDENTIFIER # mandatory, help to identify the failed object names
           row_title_by: [RULE_CATEGORY,RULE,STATUS] # optional, default to get group_by's columns
           row_doc_by: RULE_DOC # optional (try to find `DOC` column if not specified), help to provide a short spec of the rule
