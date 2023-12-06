@@ -85,46 +85,48 @@ class EvaluatorReportAsset(Asset):
         return "⌛"
     
     def get_title(self, row, cols=[]):
-        return " / ".join([row[x] for x in cols])
+        return " / ".join([str(row[x]) for x in cols])
     
     def chart(self, data: pd.DataFrame):
-        group_by_cols = self.spec.get("evaluator_spec",{})\
-            .get("group_by", ["GROUP_BY"])
-        title_by_cols = self.spec.get("evaluator_spec",{})\
-            .get("title_by", ["TITLE_BY"])
-        sort_by_cols = self.spec.get("evaluator_spec",{})\
-            .get("sort_by", ["SORT_BY"])
-        accending = self.spec.get("evaluator_spec",{})\
-            .get("sort_ascending", [True for x in sort_by_cols])
-        status_col = self.spec.get("evaluator_spec",{})\
-            .get("status", "STATUS")
-        doc_by_col = self.spec.get("evaluator_spec",{})\
-            .get("doc_by")
-        identifier_by_col = self.spec.get("evaluator_spec",{})\
-            .get("identifier_by")
-        metric_col = self.spec.get("metric")
-        data = data.fillna({identifier_by_col: ""})
+        evaluation_spec = self.spec.get("evaluator_spec",{})
         
+        group_by_cols = evaluation_spec.get("group_by", data.columns.tolist())
+        sort_by_cols = evaluation_spec.get("sort_by", list(group_by_cols))
+        sort_accendings = evaluation_spec.get("sort_ascending", [True for x in sort_by_cols])
+        metric_col = self.spec.get("metric")
+            
+        row_identifier_by_col = evaluation_spec.get("row_identifier_by")
+        row_status_col = evaluation_spec.get("row_status", "STATUS")
+        row_title_by_cols = evaluation_spec.get("row_title_by", list(group_by_cols))
+        row_doc_by_col = evaluation_spec.get("row_doc_by", "DOC")
+        
+        data = data.fillna({row_identifier_by_col: ""})
         group_by_cols.insert(0, pd.Categorical(data[metric_col]))
         agg = data.groupby(group_by_cols, observed=True).sum().reset_index()
-            
         agg = agg.sort_values(
             by=sort_by_cols,
-            ascending=accending
+            ascending=sort_accendings
         )
-        
+
         for _, row in agg.iterrows():
-            light = self.get_traffic_light(status=row[status_col])
-            title = self.get_title(row=row, cols=title_by_cols)
+            light = self.get_traffic_light(status=row[row_status_col] if row_status_col in agg else "")
+            title = self.get_title(row=row, cols=row_title_by_cols)
             
             with streamlit.expander(f"{light} {title} ({row[metric_col]})"):
-                streamlit.markdown(row[doc_by_col])
-                
-                rule_data = pd.DataFrame(
-                    data=row[identifier_by_col].split(","),
-                    columns=[identifier_by_col]
+                streamlit.markdown(
+                    row[row_doc_by_col] if row_doc_by_col in agg 
+                    else (
+                        "> _⚠️ `DOC` column is not configured or not found in the input data"
+                        ". Please update the Asset spec (`row_doc_by`) and retry!_"
+                    )
                 )
-                streamlit.dataframe(rule_data, hide_index=True)
+                streamlit.dataframe(
+                    pd.DataFrame(
+                        data=row[row_identifier_by_col].split(","),
+                        columns=[row_identifier_by_col]
+                    ), 
+                    hide_index=True
+                )
 
 
 class AssetStreamlitChartMap:
