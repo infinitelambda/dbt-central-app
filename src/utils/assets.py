@@ -89,6 +89,7 @@ class EvaluatorReportAsset(Asset):
     
     def chart(self, data: pd.DataFrame):
         evaluation_spec = self.spec.get("evaluator_spec",{})
+        assert evaluation_spec != {}, "evaluator_spec is not specified"
         
         group_by_cols = evaluation_spec.get("group_by", data.columns.tolist())
         sort_by_cols = evaluation_spec.get("sort_by", list(group_by_cols))
@@ -96,7 +97,9 @@ class EvaluatorReportAsset(Asset):
         metric_col = self.spec.get("metric")
             
         row_identifier_by_col = evaluation_spec.get("row_identifier_by")
+        assert evaluation_spec != {}, "row_identifier_by is not specified"
         row_status_col = evaluation_spec.get("row_status", "STATUS")
+        assert evaluation_spec != {}, "row_status is not specified"
         row_title_by_cols = evaluation_spec.get("row_title_by", list(group_by_cols))
         row_doc_by_col = evaluation_spec.get("row_doc_by", "DOC")
         
