@@ -75,40 +75,55 @@ class IndicatorAsset(Asset):
 
 
 class EvaluatorReportAsset(Asset):
+    def get_traffic_light(self, status):
+        if status == "PASS":
+            return "🟢"
+        if status == "WARN":
+            return "🟡"
+        if status == "FAIL":
+            return "🔴"
+        return "⌛"
+    
+    def get_title(self, row, cols=[]):
+        return " / ".join([row[x] for x in cols])
+    
     def chart(self, data: pd.DataFrame):
-        agg = data.groupby([
-                data.columns[0], # rule category
-                data.columns[1], # rule name
-                data.columns[2]  # rule doc
-            ])[
-                data.columns[4]  # rule status: pass(0) and fail(1)
-            ].agg([
-                ("# FAILED", lambda x: (x > 0).sum()),
-                ("# TOTAL", "count")
-            ]).reset_index()
-
+        group_by_cols = self.spec.get("evaluator_spec",{})\
+            .get("group_by", ["GROUP_BY"])
+        title_by_cols = self.spec.get("evaluator_spec",{})\
+            .get("title_by", ["TITLE_BY"])
+        sort_by_cols = self.spec.get("evaluator_spec",{})\
+            .get("sort_by", ["SORT_BY"])
+        accending = self.spec.get("evaluator_spec",{})\
+            .get("sort_ascending", [True for x in sort_by_cols])
+        status_col = self.spec.get("evaluator_spec",{})\
+            .get("status", "STATUS")
+        doc_by_col = self.spec.get("evaluator_spec",{})\
+            .get("doc_by")
+        identifier_by_col = self.spec.get("evaluator_spec",{})\
+            .get("identifier_by")
+        metric_col = self.spec.get("metric")
+        data = data.fillna({identifier_by_col: ""})
+        
+        group_by_cols.insert(0, pd.Categorical(data[metric_col]))
+        agg = data.groupby(group_by_cols, observed=True).sum().reset_index()
+            
         agg = agg.sort_values(
-            by=[
-                agg.columns[3], # failed count desc
-                agg.columns[0], # rule category asc
-                agg.columns[1]  # rule name asc
-            ],
-            ascending=[False, True, True]
+            by=sort_by_cols,
+            ascending=accending
         )
-
+        
         for _, row in agg.iterrows():
-            title = ("🟢 " if row.iloc[3] == 0 else "🔴 ")\
-                + row.iloc[0].upper() + " / " + row.iloc[1] \
-                + f" ({row.iloc[3]}/{row.iloc[4]})"
+            light = self.get_traffic_light(status=row[status_col])
+            title = self.get_title(row=row, cols=title_by_cols)
+            
+            with streamlit.expander(f"{light} {title} ({row[metric_col]})"):
+                streamlit.markdown(row[doc_by_col])
                 
-            with streamlit.expander(title):
-                rule_data = data[
-                    (data[data.columns[0]] == row.iloc[0])
-                    & (data[data.columns[1]] == row.iloc[1])
-                ].copy()
-                rule_data.drop(data.columns[2], axis=1, inplace=True)
-
-                streamlit.markdown(row.iloc[2])
+                rule_data = pd.DataFrame(
+                    data=row[identifier_by_col].split(","),
+                    columns=[identifier_by_col]
+                )
                 streamlit.dataframe(rule_data, hide_index=True)
 
 

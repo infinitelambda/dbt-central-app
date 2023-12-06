@@ -7,7 +7,21 @@ dashboards:
     package_name: snowflake-evaluator
     assets:
       - name: Last Evaluation
+        title: Last Evaluation's input data produced by the mf query
+        description: Last Evaluation
+        metric: CNT
+        type: table
+        
+      - name: Last Evaluation
         title: Last Evaluation
         description: Last Evaluation
-        metric: rule_category,rule,description,status
+        metric: CNT
         type: evaluator_report
+        evaluator_spec:
+          group_by: [RULE_CATEGORY,RULE,RULE_DOC,IDENTIFIER,STATUS]
+          title_by: [RULE_CATEGORY,RULE,STATUS]
+          sort_by: [CNT, RULE_CATEGORY, RULE]
+          sort_ascending: [False, True, True]
+          identifier_by: IDENTIFIER
+          doc_by: RULE_DOC
+          status: STATUS
