@@ -1,9 +1,0 @@
-RULE_CATEGORY,RULE,RULE_DOC,IDENTIFIER,STATUS,CNT
-OBJECT,rule_object_1,[See the doc for the rule reference](https://diqu.iflambda.com/latest/nav/guide/config/sources/snowflake.html),"Toti, Dat",FAIL,2
-OBJECT,rule_object_2,rule_2_doc_markdown,,PASS,0
-PARAMATER,rule_object_3,rule_3_doc_markdown,Tomas,FAIL,1
-PARAMATER,rule_object_4,rule_4_doc_markdown,,PASS,0
-USER,rule_object_5,rule_5_doc_markdown,,PASS,0
-USER,rule_object_6,rule_6_doc_markdown,Tomas,FAIL,1
-USER,rule_object_7,xxx,,PASS,0
-USER,rule_object_8,xxx,,PASS,0

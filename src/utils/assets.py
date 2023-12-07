@@ -98,11 +98,11 @@ class EvaluatorReportAsset(Asset):
         metric_col = self.spec.get("metric")
             
         row_identifier_by_col = evaluation_spec.get("row_identifier_by")
-        assert evaluation_spec != {}, "row_identifier_by is not specified"
+        assert row_identifier_by_col is not None, "row_identifier_by is not specified"
         row_status_col = evaluation_spec.get("row_status_by", "STATUS")
-        assert evaluation_spec != {}, "row_status_by is not specified"
+        assert row_status_col in data, "row_status_by value cannot be found in the data"
         row_title_by_cols = evaluation_spec.get("row_title_by", list(group_by_cols))
-        row_doc_by_col = evaluation_spec.get("row_doc_by", "DOC")
+        row_doc_by_cols = evaluation_spec.get("row_doc_by", ["DOC"])
         
         # agg data
         data = data.fillna({row_identifier_by_col: ""})
@@ -119,13 +119,13 @@ class EvaluatorReportAsset(Asset):
             title = self.get_title(row=row, cols=row_title_by_cols)
             
             with streamlit.expander(f"{light} {title} ({row[metric_col]})"):
-                streamlit.markdown(
-                    row[row_doc_by_col] if row_doc_by_col in agg 
-                    else (
-                        "> _⚠️ `DOC` column is not configured or not found in the input data"
-                        ". Please update the Asset spec (`row_doc_by`) and retry!_"
+                for doc in row_doc_by_cols:
+                    streamlit.markdown(
+                        f"ℹ️ {row[doc]}" if doc in agg 
+                        else "> _⚠️ `{doc}` column is not found in the input data"
                     )
-                )
+                    
+                streamlit.markdown("**👀 Identifiers of the detected failure(s):**")
                 streamlit.dataframe(
                     pd.DataFrame(
                         data=row[row_identifier_by_col].split(","),
