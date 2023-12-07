@@ -122,7 +122,7 @@ class EvaluatorReportAsset(Asset):
                 for doc in row_doc_by_cols:
                     streamlit.markdown(
                         f"ℹ️ {row[doc]}" if doc in agg 
-                        else "> _⚠️ `{doc}` column is not found in the input data"
+                        else f"> _⚠️ `{doc}` column is not found in the input data_"
                     )
                     
                 streamlit.markdown("**👀 Identifiers of the detected failure(s):**")

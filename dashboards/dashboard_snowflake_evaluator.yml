@@ -24,4 +24,4 @@ dashboards:
           row_status_by: RULE_ID__RULE_STATUS # mandatory (try to find `STATUS` column if not specified), help to define the traffic lights
           row_identifier_by: RULE_ID__IDENTIFIERS # mandatory, help to identify the failed object names
           row_title_by: [RULE_ID__RULE_CATEGORY,RULE_ID,RULE_ID__RULE_STATUS] # optional, default to get group_by's columns
-          row_doc_by: [RULE_ID__RULE_NAME, RULE_ID__RULE_DOC, DOC] # optional (try to find `DOC` column if not specified), help to provide a short spec of the rule
+          row_doc_by: [RULE_ID__RULE_NAME, RULE_ID__RULE_DOC] # optional (try to find `DOC` column if not specified), help to provide a short spec of the rule
