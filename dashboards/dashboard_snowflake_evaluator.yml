@@ -1,0 +1,34 @@
+version: 2
+
+dashboards:
+  - name: Snowflake Evaluation
+    title: Dashboards for the Snowflake Evaluation
+    description: Dashboards for the Snowflake Evaluation
+    package_name: snowflake-evaluator
+    assets:
+      - name: Rules Results
+        title: Metric data produced by the mf query
+        description: Metric data produced by the mf query
+        metric: MET_DA_AGG_RESULTS_ALL
+        type: table
+        
+      - name: Rules Results
+        title: Last Evaluation Report
+        description: Last Evaluation
+        metric: MET_DA_AGG_RESULTS_ALL
+        type: evaluator_report
+        # List of the streamlit's Expanders
+        # Each expander will a group of thing with the configurable components:
+        # - Traffic Light:  translated from the STATUS
+        # - Title: Concatenation of fields with the divider ("/")
+        # - Details: Showing docs and identifiers for the group
+        #   - docs: Description of the group with a list of fields
+        #   - identifiers: Failure values
+        evaluator_report_spec:
+          # group_by: [...] # optional, default to get all columns, and sum(metric)
+          sort_by: [MET_DA_AGG_RESULTS_ALL, RULE_ID__RULE_CATEGORY, RULE_ID] # optional, default to get group_by's columns
+          sort_ascending: [False, True, True] # optional, default to all True
+          row_status_by: RULE_ID__RULE_STATUS # mandatory (try to find `STATUS` column if not specified), help to define the traffic lights
+          row_identifier_by: RULE_ID__IDENTIFIERS # mandatory, help to identify the failed object names
+          row_title_by: [RULE_ID__RULE_CATEGORY,RULE_ID,RULE_ID__RULE_STATUS] # optional, default to get group_by's columns
+          row_doc_by: [RULE_ID__RULE_NAME, RULE_ID__RULE_DOC] # optional (try to find `DOC` column if not specified), help to provide a short spec of the rule
